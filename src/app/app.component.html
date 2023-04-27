@@ -2,11 +2,7 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <h1>Root component works!</h1>
-      <app-auth *ngIf="loadedFeature === 'auth'"></app-auth>
-      <app-dashboard *ngIf="loadedFeature === 'dashboard'"></app-dashboard>
-      <app-schools *ngIf="loadedFeature === 'schools'"></app-schools>
-      <app-students *ngIf="loadedFeature === 'students'"></app-students>
+      <router-outlet></router-outlet>
     </div>
   </div>
 </div>

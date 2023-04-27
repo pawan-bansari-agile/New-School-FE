@@ -13,12 +13,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let school of schools">
+        <tr *ngFor="let school of schools; let i = index">
           <td>{{ school.name }}</td>
           <td>{{ school.email }}</td>
           <td>{{ school.address }}</td>
           <td>{{ school.city }}</td>
-          <td><button (click)="showDetails(school)">View</button></td>
+          <td><button >View</button></td>
         </tr>
       </tbody>
     </table>

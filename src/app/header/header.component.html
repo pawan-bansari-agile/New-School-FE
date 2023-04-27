@@ -5,13 +5,13 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li><a href="#" (click)="onSelect('auth')">Auth</a></li>
-        <li><a href="#" (click)="onSelect('dashboard')">Dashboard</a></li>
-        <li><a href="#" (click)="onSelect('schools')">Schools</a></li>
-        <li><a href="#" (click)="onSelect('students')">Students</a></li>
+        <li routerLinkActive="active"><a routerLink="/auth">Auth</a></li>
+        <li routerLinkActive="active"><a routerLink="/dashboard">Dashboard</a></li>
+        <li routerLinkActive="active"><a routerLink="/schools">Schools</a></li>
+        <li routerLinkActive="active"><a routerLink="/students">Students</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Logout</a></li>
+        <li><a>Logout</a></li>
       </ul>
     </div>
   </div>

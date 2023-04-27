@@ -13,6 +13,11 @@ import { SchoolItemComponent } from './schools/school-list/school-item/school-it
 import { StudentListComponent } from './students/student-list/student-list.component';
 import { StudentDetailsComponent } from './students/student-details/student-details.component';
 import { StudentItemComponent } from './students/student-list/student-item/student-item.component';
+import { DropDownDirective } from './shared/dropdown.directive';
+import { FormsModule } from '@angular/forms';
+import { AppRoutingModule } from './app-routing.module';
+import { SchoolStartComponent } from './schools/school-start/school-start.component';
+import { StudentStartComponent } from './students/student-start/student-start.component';
 
 @NgModule({
   declarations: [
@@ -27,12 +32,13 @@ import { StudentItemComponent } from './students/student-list/student-item/stude
     SchoolItemComponent,
     StudentListComponent,
     StudentDetailsComponent,
-    StudentItemComponent
+    StudentItemComponent,
+    DropDownDirective,
+    SchoolStartComponent,
+    StudentStartComponent,
   ],
-  imports: [
-    BrowserModule
-  ],
+  imports: [BrowserModule, FormsModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

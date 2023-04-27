@@ -1,1 +1,26 @@
-<app-student-item></app-student-item>
+<div class="row col-xs-12">
+  <button class="btn btn-success">New Student</button>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Standard</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students">
+          <td>{{ student.name }}</td>
+          <td>{{ student.address }}</td>
+          <td>{{ student.std }}</td>
+          <td>{{ student.status }}</td>
+          <td><button >View</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

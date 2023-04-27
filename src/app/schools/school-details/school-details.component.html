@@ -1,10 +1,12 @@
 <div class="row">
   <div class="col-xs-12">
-    <button class="btn btn-primary dropdown-toggle">Manage <span class="caret"></span></button>
-    <ul class="dropdown-menu">
-      <a href="#">Edit</a>
-      <a >Delete</a>
-    </ul>
+    <div class="btn-grp" appDropDown>
+      <button class="btn btn-primary dropdown-toggle" >Manage <span class="caret"></span></button>
+      <ul class="dropdown-menu">
+        <li><a style="cursor: pointer;">Edit</a></li>
+        <li><a style="cursor: pointer;">Delete</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 <div class="row">
@@ -17,3 +19,38 @@
     {{school.name}}
   </div>
 </div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.email}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.address}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.city}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.state}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.zipCode}}
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    {{school.country}}
+  </div>
+</div>
+
+
+
+
+
