@@ -6,4 +6,6 @@ import { School } from './school.model';
   templateUrl: './schools.component.html',
   styleUrls: ['./schools.component.css'],
 })
-export class SchoolsComponent {}
+export class SchoolsComponent {
+  selectedSchool: School;
+}

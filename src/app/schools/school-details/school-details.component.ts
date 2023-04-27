@@ -7,5 +7,5 @@ import { School } from '../school.model';
   styleUrls: ['./school-details.component.css'],
 })
 export class SchoolDetailsComponent {
-  @Input() selectedSchool: School = null;
+  @Input() school: School;
 }
