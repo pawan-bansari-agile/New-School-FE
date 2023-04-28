@@ -14,10 +14,13 @@ import { StudentListComponent } from './students/student-list/student-list.compo
 import { StudentDetailsComponent } from './students/student-details/student-details.component';
 import { StudentItemComponent } from './students/student-list/student-item/student-item.component';
 import { DropDownDirective } from './shared/dropdown.directive';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { SchoolStartComponent } from './schools/school-start/school-start.component';
 import { StudentStartComponent } from './students/student-start/student-start.component';
+import { SchoolService } from './schools/school.service';
+import { StudentService } from './students/student.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -37,8 +40,14 @@ import { StudentStartComponent } from './students/student-start/student-start.co
     SchoolStartComponent,
     StudentStartComponent,
   ],
-  imports: [BrowserModule, FormsModule, AppRoutingModule],
-  providers: [],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+  ],
+  providers: [SchoolService, StudentService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

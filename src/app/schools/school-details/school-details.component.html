@@ -3,15 +3,15 @@
     <div class="btn-grp" appDropDown>
       <button class="btn btn-primary dropdown-toggle" >Manage <span class="caret"></span></button>
       <ul class="dropdown-menu">
-        <li><a style="cursor: pointer;">Edit</a></li>
-        <li><a style="cursor: pointer;">Delete</a></li>
+        <li><a style="cursor: pointer;" (click)="onEditSchool()">Edit</a></li>
+        <li><a style="cursor: pointer;" (click)="onDeleteSchool()">Delete</a></li>
       </ul>
     </div>
   </div>
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <img src="" alt="School Photo" class="img-responsive">
+    <img src="{{school.photo}}" alt="School Photo" class="img-responsive" style="height: 300px;">
   </div>
 </div>
 <div class="row">

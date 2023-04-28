@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { School } from '../school.model';
 import { SchoolService } from '../school.service';
 
@@ -15,6 +15,7 @@ export class SchoolDetailsComponent implements OnInit {
   constructor(
     private schoolService: SchoolService,
     private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -22,5 +23,14 @@ export class SchoolDetailsComponent implements OnInit {
       this.id = +params['id'];
       this.school = this.schoolService.getSchoolById(this.id);
     });
+  }
+
+  onEditSchool() {
+    this.router.navigate(['edit'], { relativeTo: this.route });
+  }
+
+  onDeleteSchool() {
+    this.schoolService.deleteSchool(this.id);
+    this.router.navigate(['/schools']);
   }
 }

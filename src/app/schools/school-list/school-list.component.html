@@ -1,5 +1,5 @@
 <div class="row col-xs-12">
-  <button class="btn btn-success">New School</button>
+  <button class="btn btn-success" (click)="onNewSchool()">New School</button>
 </div>
 <div class="row">
   <div class="col-xs-12">
@@ -13,12 +13,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let school of schools; let i = index">
+        <tr *ngFor="let school of schools; let i = index"
+        [ngClass]="{'active': selectedIndex === i}"
+        (click)="selectedIndex = i">
           <td>{{ school.name }}</td>
           <td>{{ school.email }}</td>
           <td>{{ school.address }}</td>
           <td>{{ school.city }}</td>
-          <td><button >View</button></td>
+          <td><button [routerLink]='[i]'>View</button></td>
         </tr>
       </tbody>
     </table>

@@ -1,12 +1,14 @@
-import { EventEmitter } from '@angular/core';
+import { Subject } from 'rxjs';
 import { School } from './school.model';
 
 export class SchoolService {
+  schoolsChanged = new Subject<School[]>();
+
   private schools: School[] = [
     new School(
       'Test Token',
       'Test Name',
-      'Test Email',
+      'test@test.com',
       'Test Address',
       'https://medical.dpu.edu.in/images/infrastructure/infrastructure-new/Infrastructure-01.jpg',
       411017,
@@ -20,12 +22,12 @@ export class SchoolService {
       'Test _id',
       1,
       'Test Message',
-      new Date(),
+      new Date()
     ),
     new School(
       'Another Test Token',
       'Another Test Name',
-      'Another Test Email',
+      'anotherTest@test.com',
       'Another Test Address',
       'https://medical.dpu.edu.in/images/infrastructure/infrastructure-new/Infrastructure-01.jpg',
       411017,
@@ -39,11 +41,9 @@ export class SchoolService {
       'Another Test _id',
       1,
       'Another Test Message',
-      new Date(),
+      new Date()
     ),
   ];
-
-  selectedSchool = new EventEmitter<School>();
 
   getSchools() {
     return this.schools.slice();
@@ -51,5 +51,20 @@ export class SchoolService {
 
   getSchoolById(id: number) {
     return this.schools[id];
+  }
+
+  addSchool(school: School) {
+    this.schools.push(school);
+    this.schoolsChanged.next(this.schools.slice());
+  }
+
+  updateSchool(id: number, school: School) {
+    this.schools[id] = school;
+    this.schoolsChanged.next(this.schools.slice());
+  }
+
+  deleteSchool(id: number) {
+    this.schools.splice(id, 1);
+    this.schoolsChanged.next(this.schools.slice());
   }
 }

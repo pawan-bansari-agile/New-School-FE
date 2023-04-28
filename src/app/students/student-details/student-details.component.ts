@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Student } from '../student.model';
 import { StudentService } from '../student.service';
 
@@ -15,6 +15,7 @@ export class StudentDetailsComponent implements OnInit {
   constructor(
     private studentService: StudentService,
     private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -22,5 +23,14 @@ export class StudentDetailsComponent implements OnInit {
       this.id = +params['id'];
       this.student = this.studentService.getStudentById(this.id);
     });
+  }
+
+  onEditStudent() {
+    this.router.navigate(['edit'], { relativeTo: this.route });
+  }
+
+  onDeleteStudent() {
+    this.studentService.deleteStudent(this.id);
+    this.router.navigate(['/students']);
   }
 }

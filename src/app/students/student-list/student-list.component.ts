@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from '../student.model';
 import { StudentService } from '../student.service';
 
@@ -10,9 +11,20 @@ import { StudentService } from '../student.service';
 export class StudentListComponent implements OnInit {
   students: Student[];
 
-  constructor(private studentService: StudentService) {}
+  constructor(
+    private studentService: StudentService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
+    this.studentService.studentsChanged.subscribe((students: Student[]) => {
+      this.students = students;
+    });
     this.students = this.studentService.getStudents();
+  }
+
+  onNewStudent() {
+    this.router.navigate(['new'], { relativeTo: this.route });
   }
 }
