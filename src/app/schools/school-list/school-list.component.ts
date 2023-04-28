@@ -21,6 +21,7 @@ export class SchoolListComponent implements OnInit {
     this.schoolService.schoolsChanged.subscribe((schools: School[]) => {
       this.schools = schools;
     });
+    this.schoolService.onInint();
     this.schools = this.schoolService.getSchools();
   }
 

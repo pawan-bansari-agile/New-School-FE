@@ -1,49 +1,40 @@
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { School } from './school.model';
 
+export interface SchoolSearchResponse {
+  data: {
+    message: string;
+    schoolsUrl: School[];
+  };
+}
+
+@Injectable()
 export class SchoolService {
   schoolsChanged = new Subject<School[]>();
 
-  private schools: School[] = [
-    new School(
-      'Test Token',
-      'Test Name',
-      'test@test.com',
-      'Test Address',
-      'https://medical.dpu.edu.in/images/infrastructure/infrastructure-new/Infrastructure-01.jpg',
-      411017,
-      'Test City',
-      'Test State',
-      'Test Country',
-      'Test Role',
-      'Test forgetPwdToken',
-      new Date(),
-      'Test deleted',
-      'Test _id',
-      1,
-      'Test Message',
-      new Date()
-    ),
-    new School(
-      'Another Test Token',
-      'Another Test Name',
-      'anotherTest@test.com',
-      'Another Test Address',
-      'https://medical.dpu.edu.in/images/infrastructure/infrastructure-new/Infrastructure-01.jpg',
-      411017,
-      'Another Test City',
-      'Another Test State',
-      'Another Test Country',
-      'Another Test Role',
-      'Another Test forgetPwdToken',
-      new Date(),
-      'Another Test deleted',
-      'Another Test _id',
-      1,
-      'Another Test Message',
-      new Date()
-    ),
-  ];
+  constructor(private http: HttpClient) {}
+
+  private schools: School[] = [];
+
+  onInint() {
+    this.http
+      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll')
+      .subscribe((schools) => {
+        console.log('schools from school service', schools);
+
+        const school = schools.data.schoolsUrl;
+        this.setSchools(school);
+        console.log('result after fetching', this.schools);
+      });
+    console.log('after completing the call', this.schools);
+  }
+
+  setSchools(schools: School[]) {
+    this.schools = schools;
+    this.schoolsChanged.next(this.schools.slice());
+  }
 
   getSchools() {
     return this.schools.slice();
