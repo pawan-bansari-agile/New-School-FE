@@ -20,7 +20,10 @@ import { SchoolStartComponent } from './schools/school-start/school-start.compon
 import { StudentStartComponent } from './students/student-start/student-start.component';
 import { SchoolService } from './schools/school.service';
 import { StudentService } from './students/student.service';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthService } from './auth/auth.service';
+import { LoadingSpinner } from './shared/loading css/loading-spinner.component';
+import { AuthInterceptor } from './auth/auth-interceptor.service';
 
 @NgModule({
   declarations: [
@@ -39,6 +42,7 @@ import { HttpClientModule } from '@angular/common/http';
     DropDownDirective,
     SchoolStartComponent,
     StudentStartComponent,
+    LoadingSpinner,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +51,12 @@ import { HttpClientModule } from '@angular/common/http';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [SchoolService, StudentService],
+  providers: [
+    SchoolService,
+    StudentService,
+    AuthService,
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

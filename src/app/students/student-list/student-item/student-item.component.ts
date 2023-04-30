@@ -16,10 +16,13 @@ export class StudentItemComponent implements OnInit {
   file: File;
   imageUrl: any;
 
+  error: string = null;
+  isLoading = false;
+
   constructor(
     private route: ActivatedRoute,
     private studentService: StudentService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +41,7 @@ export class StudentItemComponent implements OnInit {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
-      reader.readAsDataURL(this.file);
+      // reader.readAsDataURL(this.file);
     }
   }
 
@@ -71,7 +74,7 @@ export class StudentItemComponent implements OnInit {
       parentNumber: new FormControl(parentNumber, [
         Validators.required,
         Validators.pattern(
-          /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6-9]\d{9}$/
+          /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6-9]\d{9}$/,
         ),
       ]),
       address: new FormControl(address, [
@@ -94,9 +97,71 @@ export class StudentItemComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.studentService.updateStudent(this.id, this.studentForm.value);
+      if (this.file) {
+        this.isLoading = true;
+        this.studentService
+          .updateInDb(this.id, this.studentForm.value, this.file)
+          .subscribe(
+            (res) => {
+              this.studentService.updateStudent(
+                this.id,
+                this.studentForm.value,
+                this.file,
+              );
+              this.isLoading = false;
+            },
+            (err) => {
+              this.error = err;
+              this.isLoading = false;
+            },
+          );
+      } else {
+        this.isLoading = true;
+        this.studentService
+          .updateInDb(this.id, this.studentForm.value, null)
+          .subscribe(
+            (res) => {
+              this.studentService.updateStudent(
+                this.id,
+                this.studentForm.value,
+                null,
+              );
+              this.isLoading = false;
+            },
+            (err) => {
+              this.error = err;
+              this.isLoading = false;
+            },
+          );
+      }
     } else {
-      this.studentService.addStudent(this.studentForm.value);
+      if (this.file) {
+        this.isLoading = true;
+        this.studentService
+          .addInDb(this.studentForm.value, this.file)
+          .subscribe(
+            (res) => {
+              this.studentService.addStudent(this.studentForm.value, this.file);
+              this.isLoading = false;
+            },
+            (err) => {
+              this.error = err;
+              this.isLoading = false;
+            },
+          );
+      } else {
+        this.isLoading = true;
+        this.studentService.addInDb(this.studentForm.value, null).subscribe(
+          (res) => {
+            this.studentService.addStudent(this.studentForm.value, null);
+            this.isLoading = false;
+          },
+          (err) => {
+            this.error = err;
+            this.isLoading = false;
+          },
+        );
+      }
     }
     this.onCancel();
   }

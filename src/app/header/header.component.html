@@ -5,13 +5,13 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li routerLinkActive="active"><a routerLink="/auth">Auth</a></li>
-        <li routerLinkActive="active"><a routerLink="/dashboard">Dashboard</a></li>
-        <li routerLinkActive="active"><a routerLink="/schools">Schools</a></li>
-        <li routerLinkActive="active"><a routerLink="/students">Students</a></li>
+        <li routerLinkActive="active" *ngIf="!isAuthenticated"><a routerLink="/auth">Auth</a></li>
+        <li routerLinkActive="active" *ngIf="isAuthenticated"><a routerLink="/dashboard">Dashboard</a></li>
+        <li routerLinkActive="active" *ngIf="isAuthenticated"><a routerLink="/schools">Schools</a></li>
+        <li routerLinkActive="active" *ngIf="isAuthenticated"><a routerLink="/students">Students</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        <li><a>Logout</a></li>
+        <li *ngIf="isAuthenticated"><a style="cursor: pointer;">Logout</a></li>
       </ul>
     </div>
   </div>

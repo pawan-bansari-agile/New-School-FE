@@ -15,11 +15,13 @@ export class SchoolItemComponent implements OnInit {
 
   file: File;
   imageUrl: any;
+  error: string = null;
+  isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
     private schoolService: SchoolService,
-    private router: Router
+    private router: Router,
   ) {}
 
   ngOnInit(): void {
@@ -38,7 +40,7 @@ export class SchoolItemComponent implements OnInit {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
-      reader.readAsDataURL(this.file);
+      // reader.readAsDataURL(this.file);
     }
   }
 
@@ -99,9 +101,73 @@ export class SchoolItemComponent implements OnInit {
 
   onSubmit() {
     if (this.editMode) {
-      this.schoolService.updateSchool(this.id, this.schoolForm.value);
+      if (this.file) {
+        this.isLoading = true;
+        this.schoolService
+          .updateInDb(this.id, this.schoolForm.value, this.file)
+          .subscribe(
+            (res) => {
+              this.schoolService.updateSchool(
+                this.id,
+                this.schoolForm.value,
+                this.file,
+              );
+              this.isLoading = false;
+            },
+            (err) => {
+              this.error = err;
+              this.isLoading = false;
+            },
+          );
+      } else {
+        this.isLoading = true;
+        this.schoolService
+          .updateInDb(this.id, this.schoolForm.value, this.file)
+          .subscribe(
+            (res) => {
+              this.schoolService.updateSchool(
+                this.id,
+                this.schoolForm.value,
+                null,
+              );
+              this.isLoading = false;
+            },
+            (err) => {
+              this.error = err;
+              this.isLoading = false;
+            },
+          );
+      }
     } else {
-      this.schoolService.addSchool(this.schoolForm.value);
+      if (this.file) {
+        this.isLoading = true;
+        this.schoolService.addInDb(this.schoolForm.value, this.file).subscribe(
+          (res) => {
+            console.log('response from add in db call from school', res);
+            this.schoolService.addSchool(this.schoolForm.value, this.file);
+            this.isLoading = false;
+          },
+          (err) => {
+            this.error = err;
+            this.isLoading = false;
+          },
+        );
+      } else {
+        this.isLoading = true;
+        this.schoolService.addInDb(this.schoolForm.value, null).subscribe(
+          (res) => {
+            console.log('response from add in db call from school', res);
+            this.schoolService.addSchool(this.schoolForm.value, null);
+            this.isLoading = false;
+          },
+          (err) => {
+            console.log('err from school add', err);
+
+            this.error = err;
+            this.isLoading = false;
+          },
+        );
+      }
     }
     this.onCancel();
   }

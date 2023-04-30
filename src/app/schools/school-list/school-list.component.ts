@@ -14,14 +14,14 @@ export class SchoolListComponent implements OnInit {
   constructor(
     private schoolService: SchoolService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {
     this.schoolService.schoolsChanged.subscribe((schools: School[]) => {
       this.schools = schools;
     });
-    this.schoolService.onInint();
+    this.schoolService.onInint().subscribe();
     this.schools = this.schoolService.getSchools();
   }
 
