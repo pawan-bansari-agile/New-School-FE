@@ -24,6 +24,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from './auth/auth.service';
 import { LoadingSpinner } from './shared/loading css/loading-spinner.component';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
+import { Alert } from './shared/alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { AuthInterceptor } from './auth/auth-interceptor.service';
     SchoolStartComponent,
     StudentStartComponent,
     LoadingSpinner,
+    Alert,
   ],
   imports: [
     BrowserModule,

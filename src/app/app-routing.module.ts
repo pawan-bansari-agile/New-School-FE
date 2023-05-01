@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
+import { AuthGuard } from './auth/auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SchoolDetailsComponent } from './schools/school-details/school-details.component';
 import { SchoolItemComponent } from './schools/school-list/school-item/school-item.component';
@@ -16,10 +17,15 @@ import { StudentsComponent } from './students/students.component';
 const appRoutes: Routes = [
   { path: '', redirectTo: '/auth', pathMatch: 'full' },
   { path: 'auth', component: AuthComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [AuthGuard],
+  },
   {
     path: 'schools',
     component: SchoolsComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: SchoolStartComponent },
       { path: 'new', component: SchoolItemComponent },
@@ -38,6 +44,7 @@ const appRoutes: Routes = [
   {
     path: 'students',
     component: StudentsComponent,
+    canActivate: [AuthGuard],
     children: [
       { path: '', component: StudentStartComponent },
       { path: 'new', component: StudentItemComponent },

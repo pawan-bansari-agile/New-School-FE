@@ -10,11 +10,12 @@ import { StudentService } from '../student.service';
 })
 export class StudentListComponent implements OnInit {
   students: Student[];
+  error: string = null;
 
   constructor(
     private studentService: StudentService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -23,9 +24,16 @@ export class StudentListComponent implements OnInit {
     });
     this.studentService.onInint().subscribe();
     this.students = this.studentService.getStudents();
+    this.studentService.errorEmitter.subscribe((err) => {
+      this.error = err;
+    });
   }
 
   onNewStudent() {
     this.router.navigate(['new'], { relativeTo: this.route });
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 }

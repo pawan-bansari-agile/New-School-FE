@@ -1,7 +1,17 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
+import { SchoolLoginResponse } from 'src/app/auth/auth.service';
+import { School } from '../../school.model';
 import { SchoolService } from '../../school.service';
+
+export interface SchoolUpdateResponse {
+  data: {
+    updatedDetails: School;
+    message: string;
+  };
+}
 
 @Component({
   selector: 'app-school-item',
@@ -15,13 +25,14 @@ export class SchoolItemComponent implements OnInit {
 
   file: File;
   imageUrl: any;
-  error: string = null;
+  // error: string = null;
+  // errorEmitter = new BehaviorSubject<string>(null);
   isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
     private schoolService: SchoolService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -106,56 +117,77 @@ export class SchoolItemComponent implements OnInit {
         this.schoolService
           .updateInDb(this.id, this.schoolForm.value, this.file)
           .subscribe(
-            (res) => {
+            (res: SchoolUpdateResponse) => {
+              console.log(
+                'response from update school call',
+                res.data.updatedDetails.photo
+              );
+
               this.schoolService.updateSchool(
                 this.id,
-                this.schoolForm.value,
-                this.file,
+                res.data.updatedDetails,
+                // this.file
+                res.data.updatedDetails.photo
               );
+              this.router.navigate(['/schools']);
               this.isLoading = false;
             },
             (err) => {
-              this.error = err;
+              // this.error = err;
+              // this.errorEmitter.next(err);
+              this.schoolService.errorEmitter.next(err);
               this.isLoading = false;
-            },
+            }
           );
       } else {
         this.isLoading = true;
         this.schoolService
-          .updateInDb(this.id, this.schoolForm.value, this.file)
+          .updateInDb(this.id, this.schoolForm.value, null)
           .subscribe(
-            (res) => {
+            (res: SchoolUpdateResponse) => {
               this.schoolService.updateSchool(
                 this.id,
-                this.schoolForm.value,
-                null,
+                res.data.updatedDetails,
+                null
               );
+              this.router.navigate(['/schools']);
               this.isLoading = false;
             },
             (err) => {
-              this.error = err;
+              // this.error = err;
+              // this.errorEmitter.next(err);
+              this.schoolService.errorEmitter.next(err);
               this.isLoading = false;
-            },
+            }
           );
       }
     } else {
       if (this.file) {
         this.isLoading = true;
         this.schoolService.addInDb(this.schoolForm.value, this.file).subscribe(
-          (res) => {
+          (res: SchoolLoginResponse) => {
+            console.log('response from add school call', res);
+
             console.log('response from add in db call from school', res);
-            this.schoolService.addSchool(this.schoolForm.value, this.file);
+            this.schoolService.addSchool(
+              this.schoolForm.value,
+              res.data.user.photo
+            );
             this.isLoading = false;
           },
           (err) => {
-            this.error = err;
+            // this.error = err;
+            // this.errorEmitter.next(err);
+            this.schoolService.errorEmitter.next(err);
             this.isLoading = false;
-          },
+          }
         );
       } else {
         this.isLoading = true;
         this.schoolService.addInDb(this.schoolForm.value, null).subscribe(
-          (res) => {
+          (res: SchoolLoginResponse) => {
+            console.log('photo', res.data.user.photo);
+
             console.log('response from add in db call from school', res);
             this.schoolService.addSchool(this.schoolForm.value, null);
             this.isLoading = false;
@@ -163,9 +195,11 @@ export class SchoolItemComponent implements OnInit {
           (err) => {
             console.log('err from school add', err);
 
-            this.error = err;
+            // this.error = err;
+            // this.errorEmitter.next(err);
+            this.schoolService.errorEmitter.next(err);
             this.isLoading = false;
-          },
+          }
         );
       }
     }

@@ -36,7 +36,7 @@ export class AuthComponent implements OnInit {
           console.log('error from admin call', error);
           this.error = error;
           this.isLoading = false;
-        },
+        }
       );
     } else {
       this.authService.loginAsSchool(this.authForm.value).subscribe(
@@ -49,7 +49,7 @@ export class AuthComponent implements OnInit {
           console.log('error from school call', err);
           this.error = err;
           this.isLoading = false;
-        },
+        }
       );
     }
     this.authForm.reset();
@@ -69,5 +69,9 @@ export class AuthComponent implements OnInit {
 
   onLoginMode() {
     this.isLoginMode = !this.isLoginMode;
+  }
+
+  onHandleError() {
+    this.error = null;
   }
 }

@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { handleError } from '../students/student.service';
 import { School } from './school.model';
 
@@ -21,6 +21,7 @@ export class SchoolService {
 
   updatedSchool: School;
   error: string = null;
+  errorEmitter = new BehaviorSubject<string>(null);
 
   onInint() {
     return this.http
@@ -29,7 +30,7 @@ export class SchoolService {
         tap((res) => {
           const school = res.data.schoolsUrl;
           this.setSchools(school);
-        }),
+        })
       );
     // .subscribe((schools) => {
     //   console.log('schools from school service', schools);
@@ -82,8 +83,8 @@ export class SchoolService {
         //   }
         //   return throwError(errorMessage);
         // }
-        handleError,
-      ),
+        handleError
+      )
     );
     // .subscribe(
     //   (res) => {
@@ -104,7 +105,7 @@ export class SchoolService {
     // );
   }
 
-  addSchool(school: School, file) {
+  addSchool(school: School, file: string) {
     // this.addInDb(school, file);
     this.schools.push(school);
     this.schoolsChanged.next(this.schools.slice());
@@ -112,8 +113,8 @@ export class SchoolService {
 
   updateInDb(id, school: School, file) {
     const toUpdate = this.getSchoolById(id);
-    console.log('toUpdate from updateschool call', toUpdate);
-    console.log('school from updateschool call', school);
+    // console.log('toUpdate from updateschool call', toUpdate);
+    // console.log('school from updateschool call', school);
     // const updatedSchool = {
     //   name: school.name,
     //   email: school.email,
@@ -161,20 +162,28 @@ export class SchoolService {
           //   }
           //   return throwError(errorMessage);
           // }
-          handleError,
-        ),
+          handleError
+        )
       );
     // .subscribe((res) => {
     //   console.log('res from update call', res);
     // });
   }
 
-  updateSchool(id: number, school: School, file: File) {
+  updateSchool(id: number, school: School, file: string) {
     // const toUpdate = this.getSchoolById(id);
     // console.log('toUpdate', toUpdate);
 
     // this.updateInDb(toUpdate, school, file);
+    console.log('school from update school call', school);
+    console.log('file path from update school call', file);
+
+    // school.photo = file;
+    console.log('school after assigning the file path', school);
+
     this.schools[id] = school;
+    console.log('schools array after change', this.schools);
+
     this.schoolsChanged.next(this.schools.slice());
   }
 

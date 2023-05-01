@@ -1,7 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Student } from '../../student.model';
 import { StudentService } from '../../student.service';
+
+export interface StudentUpdateResponse {
+  data: Student;
+}
+
+export interface StudentAddResponse {
+  data: {
+    newStudent: Student;
+    message: string;
+  };
+}
 
 @Component({
   selector: 'app-student-item',
@@ -16,13 +28,13 @@ export class StudentItemComponent implements OnInit {
   file: File;
   imageUrl: any;
 
-  error: string = null;
+  // error: string = null;
   isLoading = false;
 
   constructor(
     private route: ActivatedRoute,
     private studentService: StudentService,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -74,7 +86,7 @@ export class StudentItemComponent implements OnInit {
       parentNumber: new FormControl(parentNumber, [
         Validators.required,
         Validators.pattern(
-          /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6-9]\d{9}$/,
+          /^(?:(?:\+|0{0,2})91(\s*[\-]\s*)?|[0]?)?[6-9]\d{9}$/
         ),
       ]),
       address: new FormControl(address, [
@@ -102,36 +114,32 @@ export class StudentItemComponent implements OnInit {
         this.studentService
           .updateInDb(this.id, this.studentForm.value, this.file)
           .subscribe(
-            (res) => {
-              this.studentService.updateStudent(
-                this.id,
-                this.studentForm.value,
-                this.file,
-              );
+            (res: StudentUpdateResponse) => {
+              this.studentService.updateStudent(this.id, res.data, this.file);
               this.isLoading = false;
+              this.router.navigate(['/students']);
             },
             (err) => {
-              this.error = err;
+              // this.error = err;
+              this.studentService.errorEmitter.next(err);
               this.isLoading = false;
-            },
+            }
           );
       } else {
         this.isLoading = true;
         this.studentService
           .updateInDb(this.id, this.studentForm.value, null)
           .subscribe(
-            (res) => {
-              this.studentService.updateStudent(
-                this.id,
-                this.studentForm.value,
-                null,
-              );
+            (res: StudentUpdateResponse) => {
+              this.studentService.updateStudent(this.id, res.data, null);
               this.isLoading = false;
+              this.router.navigate(['/students']);
             },
             (err) => {
-              this.error = err;
+              // this.error = err;
+              this.studentService.errorEmitter.next(err);
               this.isLoading = false;
-            },
+            }
           );
       }
     } else {
@@ -140,26 +148,28 @@ export class StudentItemComponent implements OnInit {
         this.studentService
           .addInDb(this.studentForm.value, this.file)
           .subscribe(
-            (res) => {
-              this.studentService.addStudent(this.studentForm.value, this.file);
+            (res: StudentAddResponse) => {
+              this.studentService.addStudent(res.data.newStudent, this.file);
               this.isLoading = false;
             },
             (err) => {
-              this.error = err;
+              // this.error = err;
+              this.studentService.errorEmitter.next(err);
               this.isLoading = false;
-            },
+            }
           );
       } else {
         this.isLoading = true;
         this.studentService.addInDb(this.studentForm.value, null).subscribe(
-          (res) => {
-            this.studentService.addStudent(this.studentForm.value, null);
+          (res: StudentAddResponse) => {
+            this.studentService.addStudent(res.data.newStudent, null);
             this.isLoading = false;
           },
           (err) => {
-            this.error = err;
+            // this.error = err;
+            this.studentService.errorEmitter.next(err);
             this.isLoading = false;
-          },
+          }
         );
       }
     }

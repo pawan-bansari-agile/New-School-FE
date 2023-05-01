@@ -4,7 +4,7 @@ import {
   HttpParams,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Subject, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { Student } from './student.model';
 
 export interface StudentSearchResponse {
@@ -44,6 +44,8 @@ export function handleError(errRes: HttpErrorResponse) {
 export class StudentService {
   studentsChanged = new Subject<Student[]>();
 
+  errorEmitter = new BehaviorSubject<string>(null);
+
   constructor(private http: HttpClient) {}
 
   students: Student[] = [
@@ -72,7 +74,7 @@ export class StudentService {
         tap((res) => {
           const student = res.data.studentUrl;
           this.setStudents(student);
-        }),
+        })
       );
     //   .subscribe((students) => {
     //     console.log('schools from school service', students);
@@ -107,13 +109,10 @@ export class StudentService {
       fd.append('file', file, file.name);
     }
     fd.append('dob', student.dob.toString());
-    // fd.append(
-    //   'school',
-    //   '643823c598bc39b0fcf6e7a9',
-    // ); /*todo:- pass school id dynamically */
+    fd.append('school', student.school); /*todo:- pass school id dynamically */
 
     let queryParams = new HttpParams();
-    queryParams = queryParams.append('id', '643823c598bc39b0fcf6e7a9');
+    queryParams = queryParams.append('id', student.school);
 
     return this.http
       .post('http://localhost:3000/students/create', fd, {
@@ -134,8 +133,8 @@ export class StudentService {
           //     break;
           // }
           // return throwError(errorMessage);
-          handleError,
-        ),
+          handleError
+        )
       );
     // .subscribe((res) => {
     //   console.log('res from create call', res);
@@ -145,6 +144,8 @@ export class StudentService {
   addStudent(student: Student, file) {
     // this.addInDb(student, file);
     this.students.push(student);
+    console.log('students after adding', this.students);
+
     this.studentsChanged.next(this.students.slice());
   }
 
@@ -194,8 +195,8 @@ export class StudentService {
           //   }
           //   return throwError(errorMessage);
           // }
-          handleError,
-        ),
+          handleError
+        )
       );
     // .subscribe((res) => {
     //   console.log('res from update call', res);
