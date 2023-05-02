@@ -3,8 +3,9 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
 import { DashboardDetailComponent } from './dashboard/dashboard-detail/dashboard-detail.component';
-// import { DashResolver } from './dashboard/dashboard-resolver.service';
+import { DashResolver } from './dashboard/dashboard-resolver.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ProfileEditComponent } from './dashboard/profile-edit/profile-edit.component';
 import { SchoolDetailsComponent } from './schools/school-details/school-details.component';
 import { SchoolItemComponent } from './schools/school-list/school-item/school-item.component';
 import { SchoolStartComponent } from './schools/school-start/school-start.component';
@@ -25,9 +26,14 @@ const appRoutes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {
+        path: 'edit',
+        component: ProfileEditComponent,
+        // resolve: [DashResolver],
+      },
+      {
         path: ':id',
         component: DashboardDetailComponent,
-        // resolve: [DashResolver],
+        resolve: [DashResolver],
       },
     ],
   },

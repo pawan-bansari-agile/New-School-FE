@@ -26,6 +26,7 @@ import { LoadingSpinner } from './shared/loading css/loading-spinner.component';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { Alert } from './shared/alert/alert.component';
 import { DashboardDetailComponent } from './dashboard/dashboard-detail/dashboard-detail.component';
+import { ProfileEditComponent } from './dashboard/profile-edit/profile-edit.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import { DashboardDetailComponent } from './dashboard/dashboard-detail/dashboard
     LoadingSpinner,
     Alert,
     DashboardDetailComponent,
+    ProfileEditComponent,
   ],
   imports: [
     BrowserModule,

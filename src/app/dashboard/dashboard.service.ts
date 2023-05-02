@@ -1,7 +1,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { tap } from 'rxjs';
 import { School } from '../schools/school.model';
-import { SchoolService } from '../schools/school.service';
+import { SchoolSearchResponse, SchoolService } from '../schools/school.service';
 import {
   StudentSearchResponse,
   StudentService,
@@ -16,6 +17,14 @@ export interface CountResponse {
   data: StdCntRes[];
 }
 
+export interface TotalStudCount {
+  data: [
+    {
+      total: number;
+    }
+  ];
+}
+
 @Injectable({ providedIn: 'root' })
 export class DashBoardService {
   constructor(
@@ -24,13 +33,39 @@ export class DashBoardService {
     private http: HttpClient
   ) {}
 
-  schools: School[];
+  schools: School[] = [];
   totalCount: number;
   stdCount: number;
   schoolCount: number;
 
   fetchSchools() {
-    return this.schoolService.onInint();
+    return this.http
+      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll')
+      .pipe(
+        tap((res) => {
+          const school = res.data.schoolsUrl;
+          console.log('from fetchschools dash service', school);
+
+          this.setSchools(school);
+        })
+      );
+  }
+
+  setSchools(schools: School[]) {
+    console.log('from set schools dah service', schools);
+
+    this.schools = schools;
+    // this.schoolsChanged.next(this.schools.slice());
+  }
+
+  getSchools() {
+    console.log('from getschools dash service', this.schools);
+
+    return this.schools.slice();
+  }
+
+  getSchoolById(id: number) {
+    return this.schools[id];
   }
 
   // getStudents(id: string) {
@@ -48,5 +83,15 @@ export class DashBoardService {
       'http://localhost:3000/students/totalCount',
       { params: queryParams }
     );
+  }
+
+  getTotalCount() {
+    return this.http
+      .get('http://localhost:3000/students/totalStudentCount')
+      .pipe(
+        tap((res: TotalStudCount) => {
+          return res.data[0].total;
+        })
+      );
   }
 }

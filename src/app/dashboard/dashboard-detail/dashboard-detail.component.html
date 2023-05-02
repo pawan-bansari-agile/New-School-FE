@@ -1,71 +1,39 @@
-<!-- <div>
-  Total students: TotalStudents
-</div>
-<table>
-  <thead>
-    <tr>
-      <th colspan="2">
-        School Name - Total Students: 500
-      </th>
-    </tr>
-    <tr>
-      <th>Standard</th>
-      <th>Student Count</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>120</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>80</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>100</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>100</td>
-    </tr>
-  </tbody>
-</table> -->
-<h3>School name: {{school.name}} : {{school.count}} Total students</h3>
-<div class="row">
-  <div class="col-md-5">
-    <div class="row">
-      <div class="col-xs-12">
-        <table class="table">
-          <thead>
-            <tr>
-              <th>Standard</th>
-              <th>Student Count</th>
-              <!-- <th>Email</th>
-              <th>Address</th>
-              <th>City</th>-->
-              <!-- <th>Details</th> -->
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of CountRes; let i = index"
-            [ngClass]="{'active': selectedIndex === i}"
-            (click)="selectedIndex = i">
-              <td>{{ item._id }}</td>
-              <td>{{ item.count }}</td>
-              <!-- <td>{{ school.email }}</td>
-              <td>{{ school.address }}</td>
-              <td>{{ school.city }}</td> -->
-              <!-- <td><button [routerLink]='[i]'>View</button></td> -->
-            </tr>
-          </tbody>
-        </table>
+<div  *ngIf="CountRes.length > 0; else NoStudents">
+  <h3>School name: {{school.name}} </h3>
+  <h3>Total students: {{school.count}} </h3>
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-xs-12">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Standard</th>
+                <th>Student Count</th>
+                <!-- <th>Email</th>
+                <th>Address</th>
+                <th>City</th>-->
+                <!-- <th>Details</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of CountRes; let i = index"
+              [ngClass]="{'active': selectedIndex === i}"
+              (click)="selectedIndex = i">
+                <td>{{ item._id }}</td>
+                <td>{{ item.count }}</td>
+                <!-- <td>{{ school.email }}</td>
+                <td>{{ school.address }}</td>
+                <td>{{ school.city }}</td> -->
+                <!-- <td><button [routerLink]='[i]'>View</button></td> -->
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
+<ng-template #NoStudents>
+  <p>No Students found for the selected school! {{school.name}}</p>
+</ng-template>

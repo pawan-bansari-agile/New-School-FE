@@ -25,7 +25,7 @@ export class DashboardDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
-      this.school = this.schoolService.getSchoolById(this.id);
+      this.school = this.dashService.getSchoolById(this.id);
       console.log('school from dashboard deetail component', this.school);
       this.getDetails(this.school.name);
     });
