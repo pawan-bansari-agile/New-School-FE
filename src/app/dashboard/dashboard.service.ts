@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs';
+import { BehaviorSubject, catchError, tap } from 'rxjs';
 import { School } from '../schools/school.model';
 import { SchoolSearchResponse, SchoolService } from '../schools/school.service';
 import {
+  handleError,
   StudentSearchResponse,
   StudentService,
 } from '../students/student.service';
@@ -21,7 +22,7 @@ export interface TotalStudCount {
   data: [
     {
       total: number;
-    }
+    },
   ];
 }
 
@@ -30,13 +31,15 @@ export class DashBoardService {
   constructor(
     private schoolService: SchoolService,
     private studentService: StudentService,
-    private http: HttpClient
+    private http: HttpClient,
   ) {}
 
   schools: School[] = [];
   totalCount: number;
   stdCount: number;
   schoolCount: number;
+  errorEmitter = new BehaviorSubject<string>(null);
+  updatedSchool = new BehaviorSubject<School>(null);
 
   fetchSchools() {
     return this.http
@@ -47,7 +50,7 @@ export class DashBoardService {
           console.log('from fetchschools dash service', school);
 
           this.setSchools(school);
-        })
+        }),
       );
   }
 
@@ -81,7 +84,7 @@ export class DashBoardService {
     queryParams = queryParams.append('school', schlName);
     return this.http.get<CountResponse>(
       'http://localhost:3000/students/totalCount',
-      { params: queryParams }
+      { params: queryParams },
     );
   }
 
@@ -91,7 +94,66 @@ export class DashBoardService {
       .pipe(
         tap((res: TotalStudCount) => {
           return res.data[0].total;
-        })
+        }),
       );
+  }
+
+  updateInDb(id, school: School, file) {
+    // const toUpdate = this.getSchoolById(id);
+    // console.log('toUpdate from updateschool call', toUpdate);
+    // console.log('school from updateschool call', school);
+    // const updatedSchool = {
+    //   name: school.name,
+    //   email: school.email,
+    //   address: school.address,
+    //   photo: school.photo ? school.photo : '',
+    //   zipCode: school.zipCode,
+    //   city: school.city,
+    //   state: school.state,
+    //   country: school.country,
+    // };
+
+    const fd = new FormData();
+    fd.append('name', school.name);
+    fd.append('email', school.email);
+    fd.append('address', school.address);
+    if (file) {
+      fd.append('file', file, file.name);
+    }
+    // else {
+    //   fd.append('file', null);
+    // }
+    fd.append('zipCode', school.zipCode.toString());
+    fd.append('city', school.city);
+    fd.append('state', school.state);
+    fd.append('country', school.country);
+    console.log('fd from updateschool call', fd);
+
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('id', id);
+    return this.http
+      .patch('http://localhost:3000/school/update', fd, {
+        params: queryParams,
+      })
+      .pipe(
+        catchError(
+          //   (errRes) => {
+          //   let errorMessage = 'An unknown error occured!';
+          //   if (!errRes.error || !errRes.error.message) {
+          //     return throwError(errorMessage);
+          //   }
+          //   switch (errRes.error.message) {
+          //     case 'School not found!':
+          //       errorMessage = 'School not found!';
+          //       break;
+          //   }
+          //   return throwError(errorMessage);
+          // }
+          handleError,
+        ),
+      );
+    // .subscribe((res) => {
+    //   console.log('res from update call', res);
+    // });
   }
 }

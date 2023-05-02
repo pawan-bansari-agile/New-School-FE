@@ -23,13 +23,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private schoolSub: Subscription;
   totalStudCnt: number;
   countResponse = [];
+  error: string = null;
   // students: Student[];
 
   constructor(
     private dashService: DashBoardService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit() {
@@ -59,6 +60,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           console.log('from dascomp', this.countResponse);
         });
     }
+    this.dashService.errorEmitter.subscribe((err) => {
+      this.error = err;
+    });
   }
 
   onUpdate(school) {

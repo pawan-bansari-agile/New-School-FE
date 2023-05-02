@@ -1,8 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthService } from 'src/app/auth/auth.service';
 import { School } from 'src/app/schools/school.model';
+import { SchoolService } from 'src/app/schools/school.service';
+import { SchoolUpdateResponse } from '../../schools/school-list/school-item/school-item.component';
+import { DashBoardService } from '../dashboard.service';
 
 @Component({
   selector: 'app-profile-edit',
@@ -13,8 +17,15 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   private schoolSub: Subscription;
   school: School;
   schoolForm: FormGroup;
+  file: File;
+  imageUrl: any;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private dashService: DashBoardService, // private schoolService: SchoolService,
+  ) {}
 
   ngOnDestroy(): void {
     this.schoolSub.unsubscribe();
@@ -24,19 +35,34 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     this.schoolSub = this.authService.school.subscribe((school) => {
       if (school) {
         this.school = school;
+        this.initForm();
+        console.log('school from profile edit component', this.school);
       }
     });
   }
 
+  getFile(event) {
+    if (event.target.files.length > 0) {
+      this.file = event.target.files[0];
+      const reader = new FileReader();
+      reader.readAsDataURL(this.file);
+      reader.onload = () => {
+        this.imageUrl = reader.result;
+      };
+      // reader.readAsDataURL(this.file);
+    }
+  }
+
   private initForm() {
-    let name = '';
-    let email = '';
-    let address = '';
+    let name = this.school.name;
+    let email = this.school.email;
+    let address = this.school.address;
     let file = '';
-    let zipCode;
-    let city = '';
-    let state = '';
-    let country = '';
+    this.imageUrl = this.school.photo;
+    let zipCode = this.school.zipCode;
+    let city = this.school.city;
+    let state = this.school.state;
+    let country = this.school.country;
 
     // if (this.editMode) {
     // const school = this.schoolService.getSchoolById(this.id);
@@ -81,5 +107,111 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         Validators.pattern(/^\S.*\S$/),
       ]),
     });
+  }
+
+  onSubmit() {
+    // if (this.editMode) {
+    if (this.file) {
+      // this.isLoading = true;
+      this.dashService
+        .updateInDb(this.school._id, this.schoolForm.value, this.file)
+        .subscribe(
+          (res: SchoolUpdateResponse) => {
+            console.log(
+              'response from update school call',
+              res.data.updatedDetails.photo,
+            );
+
+            // this.schoolService.updateSchool(
+            //   this.school._id,
+            //   res.data.updatedDetails,
+            //   // this.file
+            //   res.data.updatedDetails.photo,
+            // );
+            this.school = res.data.updatedDetails;
+            this.imageUrl = res.data.updatedDetails.photo;
+            // this.authService.school.next(res.data.updatedDetails);
+            this.onCancel();
+            // this.isLoading = false;
+          },
+          (err) => {
+            // this.error = err;
+            // this.errorEmitter.next(err);
+            this.dashService.errorEmitter.next(err);
+            // this.isLoading = false;
+          },
+        );
+    } else {
+      // this.isLoading = true;
+      this.dashService
+        .updateInDb(this.school._id, this.schoolForm.value, null)
+        .subscribe(
+          (res: SchoolUpdateResponse) => {
+            // this.schoolService.updateSchool(
+            //   this.id,
+            //   res.data.updatedDetails,
+            //   null,
+            // );
+            this.school = res.data.updatedDetails;
+            this.imageUrl = res.data.updatedDetails.photo;
+            // this.authService.school.next(res.data.updatedDetails);
+            this.onCancel();
+            // this.isLoading = false;
+          },
+          (err) => {
+            // this.error = err;
+            // this.errorEmitter.next(err);
+            this.dashService.errorEmitter.next(err);
+            // this.isLoading = false;
+          },
+        );
+    }
+    // } else {
+    //   if (this.file) {
+    //     this.isLoading = true;
+    //     this.schoolService.addInDb(this.schoolForm.value, this.file).subscribe(
+    //       (res: SchoolLoginResponse) => {
+    //         console.log('response from add school call', res);
+
+    //         console.log('response from add in db call from school', res);
+    //         this.schoolService.addSchool(
+    //           this.schoolForm.value,
+    //           res.data.user.photo
+    //         );
+    //         this.isLoading = false;
+    //       },
+    //       (err) => {
+    //         // this.error = err;
+    //         // this.errorEmitter.next(err);
+    //         this.schoolService.errorEmitter.next(err);
+    //         this.isLoading = false;
+    //       }
+    //     );
+    //   } else {
+    //     this.isLoading = true;
+    //     this.schoolService.addInDb(this.schoolForm.value, null).subscribe(
+    //       (res: SchoolLoginResponse) => {
+    //         console.log('photo', res.data.user.photo);
+
+    //         console.log('response from add in db call from school', res);
+    //         this.schoolService.addSchool(this.schoolForm.value, null);
+    //         this.isLoading = false;
+    //       },
+    //       (err) => {
+    //         console.log('err from school add', err);
+
+    //         // this.error = err;
+    //         // this.errorEmitter.next(err);
+    //         this.schoolService.errorEmitter.next(err);
+    //         this.isLoading = false;
+    //       }
+    //     );
+    //   }
+    // }
+    this.onCancel();
+  }
+
+  onCancel() {
+    this.router.navigate(['../'], { relativeTo: this.route });
   }
 }
