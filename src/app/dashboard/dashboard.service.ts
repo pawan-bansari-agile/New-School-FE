@@ -7,6 +7,15 @@ import {
   StudentService,
 } from '../students/student.service';
 
+export interface StdCntRes {
+  _id: number;
+  count: number;
+}
+
+export interface CountResponse {
+  data: StdCntRes[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class DashBoardService {
   constructor(
@@ -20,19 +29,24 @@ export class DashBoardService {
   stdCount: number;
   schoolCount: number;
 
-  fethcSchools() {
+  fetchSchools() {
     return this.schoolService.onInint();
   }
 
-  getStudents(id: string) {
+  // getStudents(id: string) {
+  //   let queryParams = new HttpParams();
+  //   // queryParams = queryParams.append();
+  //   return this.http.get<StudentSearchResponse>(
+  //     'http://localhost:3000/students/findAll'
+  //   );
+  // }
+
+  standCount(schlName: string) {
     let queryParams = new HttpParams();
-    // queryParams = queryParams.append();
-    return this.http.get<StudentSearchResponse>(
-      'http://localhost:3000/students/findAll'
+    queryParams = queryParams.append('school', schlName);
+    return this.http.get<CountResponse>(
+      'http://localhost:3000/students/totalCount',
+      { params: queryParams }
     );
   }
-
-  standCount() {}
-
-  schlCount() {}
 }

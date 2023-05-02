@@ -11,15 +11,13 @@ import { DashBoardService } from './dashboard.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  totalStudentCount: number = 0;
-  standards: number = 0;
   schools: School[];
-  students: Student[];
+  // students: Student[];
 
   constructor(private dashService: DashBoardService) {}
 
   ngOnInit() {
-    this.dashService.fethcSchools().subscribe((res) => {
+    this.dashService.fetchSchools().subscribe((res) => {
       this.schools = res.data.schoolsUrl;
       console.log('schools from dashboard service', this.schools);
     });

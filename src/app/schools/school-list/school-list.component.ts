@@ -11,6 +11,11 @@ import { SchoolService } from '../school.service';
 export class SchoolListComponent implements OnInit {
   schools: School[];
   error: string = null;
+  pageSize: number = 5;
+  currentPage: number = 1;
+  totalPages: number;
+  pages: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  searchQuery: string;
 
   constructor(
     private schoolService: SchoolService,

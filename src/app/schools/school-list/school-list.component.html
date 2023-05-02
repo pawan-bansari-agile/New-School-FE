@@ -1,6 +1,12 @@
 <app-alert [message]="error" *ngIf="error" (close)="onHandleError()" ></app-alert>
 <div class="row col-xs-12">
-  <button class="btn btn-success" (click)="onNewSchool()">New School</button>
+  <button class="btn btn-success" style="margin-bottom: 10px;" (click)="onNewSchool()">New School</button>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <input type="text" class="form-control" placeholder="Search"
+    [(ngModel)]="searchQuery">
+  </div>
 </div>
 <div class="row">
   <div class="col-xs-12">
@@ -26,5 +32,25 @@
         </tr>
       </tbody>
     </table>
+    <div class="text-center">
+      <ul class="pagination">
+        <li [class.disabled]="currentPage <= 1">
+          <a (click)="currentPage = 1">First</a>
+        </li>
+        <li [class.disabled]="currentPage <= 1">
+          <a (click)="currentPage = currentPage - 1">Previous</a>
+        </li>
+        <li *ngFor="let page of pages"
+        [class.active]="currentPage == page">
+          <a (click)="currentPage = page">{{ page }}</a>
+        </li>
+        <li [class.disabled]="currentPage == totalPages">
+          <a (click)="currentPage = currentPage + 1">Next</a>
+        </li>
+        <li [class.disabled]="currentPage == totalPages">
+          <a (click)="currentPage = totalPages">Last</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </div>

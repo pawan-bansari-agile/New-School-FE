@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { AuthGuard } from './auth/auth.guard';
+import { DashboardDetailComponent } from './dashboard/dashboard-detail/dashboard-detail.component';
+// import { DashResolver } from './dashboard/dashboard-resolver.service';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SchoolDetailsComponent } from './schools/school-details/school-details.component';
 import { SchoolItemComponent } from './schools/school-list/school-item/school-item.component';
@@ -21,6 +23,13 @@ const appRoutes: Routes = [
     path: 'dashboard',
     component: DashboardComponent,
     canActivate: [AuthGuard],
+    children: [
+      {
+        path: ':id',
+        component: DashboardDetailComponent,
+        // resolve: [DashResolver],
+      },
+    ],
   },
   {
     path: 'schools',

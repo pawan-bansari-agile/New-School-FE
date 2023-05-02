@@ -132,6 +132,7 @@ export class AuthService {
             resData.data.user._id,
             resData.data.user.__v,
             resData.data.message,
+            resData.data.user.count,
             expirationDate
           );
           console.log('school from school login call', school);
@@ -209,6 +210,7 @@ export class AuthService {
         loadedSchool._id,
         loadedSchool.__v,
         loadedSchool.message,
+        loadedSchool.count,
         new Date(loadedSchool.expirationDate)
       );
 

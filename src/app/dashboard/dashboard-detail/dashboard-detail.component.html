@@ -36,6 +36,7 @@
     </tr>
   </tbody>
 </table> -->
+<h3>School name: {{school.name}} : {{school.count}} Total students</h3>
 <div class="row">
   <div class="col-md-5">
     <div class="row">
@@ -43,31 +44,28 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Total Count</th>
+              <th>Standard</th>
+              <th>Student Count</th>
               <!-- <th>Email</th>
               <th>Address</th>
               <th>City</th>-->
-              <th>Details</th>
+              <!-- <th>Details</th> -->
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let school of schools; let i = index"
+            <tr *ngFor="let item of CountRes; let i = index"
             [ngClass]="{'active': selectedIndex === i}"
             (click)="selectedIndex = i">
-              <td>{{ school.name }}</td>
-              <td>{{ school.count }}</td>
+              <td>{{ item._id }}</td>
+              <td>{{ item.count }}</td>
               <!-- <td>{{ school.email }}</td>
               <td>{{ school.address }}</td>
               <td>{{ school.city }}</td> -->
-              <td><button [routerLink]='[i]'>View</button></td>
+              <!-- <td><button [routerLink]='[i]'>View</button></td> -->
             </tr>
           </tbody>
         </table>
       </div>
     </div>
-  </div>
-  <div class="col-md-7">
-    <router-outlet></router-outlet>
   </div>
 </div>

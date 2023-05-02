@@ -16,6 +16,7 @@ export class School {
     public _id: string,
     public __v: number,
     public message: string,
+    public count: number,
     public expirationDate?: Date
   ) {
     access_token = access_token;
@@ -34,6 +35,7 @@ export class School {
     state = state;
     country = country;
     message = message;
+    count = count;
     expirationDate = expirationDate;
   }
 }

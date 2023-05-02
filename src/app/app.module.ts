@@ -25,6 +25,7 @@ import { AuthService } from './auth/auth.service';
 import { LoadingSpinner } from './shared/loading css/loading-spinner.component';
 import { AuthInterceptor } from './auth/auth-interceptor.service';
 import { Alert } from './shared/alert/alert.component';
+import { DashboardDetailComponent } from './dashboard/dashboard-detail/dashboard-detail.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { Alert } from './shared/alert/alert.component';
     StudentStartComponent,
     LoadingSpinner,
     Alert,
+    DashboardDetailComponent,
   ],
   imports: [
     BrowserModule,
