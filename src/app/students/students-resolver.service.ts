@@ -16,7 +16,7 @@ export class StudentResolver
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
+    state: RouterStateSnapshot
   ):
     | StudentSearchResponse
     | Observable<StudentSearchResponse>
@@ -24,7 +24,7 @@ export class StudentResolver
     | Student[] {
     const students = this.studentService.getStudents();
     if (students.length === 0) {
-      return this.studentService.onInint();
+      return this.studentService.onInint('', '', '', '', '');
     } else {
       return students;
     }

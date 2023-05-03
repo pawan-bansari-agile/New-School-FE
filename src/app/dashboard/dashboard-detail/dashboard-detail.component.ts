@@ -14,7 +14,7 @@ export class DashboardDetailComponent implements OnInit {
   // standard: number = 0;
   id: number;
   school: School;
-  CountRes: StdCntRes[];
+  CountRes: StdCntRes[] = [];
 
   constructor(
     private dashService: DashBoardService,

@@ -11,6 +11,8 @@ export interface StudentSearchResponse {
   data: {
     message: string;
     studentUrl: Student[];
+    pageNumber: string;
+    limit: string;
   };
 }
 
@@ -74,9 +76,31 @@ export class StudentService {
 
   updatedStudent: Student;
 
-  onInint() {
+  onInint(
+    fieldName: string,
+    fieldValue: string,
+    keyword: string,
+    sortBy: string,
+    sortOrder: string,
+    pageNumber?: number,
+    limit?: number
+  ) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('fieldName', fieldName);
+    queryParams = queryParams.append('fieldValue', fieldValue);
+    if (pageNumber) {
+      queryParams = queryParams.append('pageNumber', pageNumber);
+    }
+    if (limit) {
+      queryParams = queryParams.append('limit', limit);
+    }
+    queryParams = queryParams.append('keyword', keyword);
+    queryParams = queryParams.append('sortBy', sortBy);
+    queryParams = queryParams.append('sortOrder', sortOrder);
     return this.http
-      .get<StudentSearchResponse>('http://localhost:3000/students/findAll')
+      .get<StudentSearchResponse>('http://localhost:3000/students/findAll', {
+        params: queryParams,
+      })
       .pipe(
         tap((res) => {
           const student = res.data.studentUrl;
@@ -248,5 +272,21 @@ export class StudentService {
         params: queryParams,
       }
     );
+  }
+
+  filter(fieldName: string, fieldValue: string) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('fieldName', fieldName);
+    queryParams = queryParams.append('fieldValue', fieldValue);
+    return this.http
+      .get<StudentSearchResponse>('http://localhost:3000/school/findAll', {
+        params: queryParams,
+      })
+      .pipe(
+        tap((res) => {
+          const school = res.data.studentUrl;
+          this.setStudents(school);
+        })
+      );
   }
 }

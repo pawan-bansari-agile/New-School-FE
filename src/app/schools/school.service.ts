@@ -8,6 +8,8 @@ export interface SchoolSearchResponse {
   data: {
     message: string;
     schoolsUrl: School[];
+    pageNumber: string;
+    limit: string;
   };
 }
 
@@ -23,9 +25,31 @@ export class SchoolService {
   error: string = null;
   errorEmitter = new BehaviorSubject<string>(null);
 
-  onInint() {
+  onInint(
+    fieldName: string,
+    fieldValue: string,
+    keyword: string,
+    sortBy: string,
+    sortOrder: string,
+    pageNumber?: number,
+    limit?: number
+  ) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('fieldName', fieldName);
+    queryParams = queryParams.append('fieldValue', fieldValue);
+    if (pageNumber) {
+      queryParams = queryParams.append('pageNumber', pageNumber);
+    }
+    if (limit) {
+      queryParams = queryParams.append('limit', limit);
+    }
+    queryParams = queryParams.append('keyword', keyword);
+    queryParams = queryParams.append('sortBy', sortBy);
+    queryParams = queryParams.append('sortOrder', sortOrder);
     return this.http
-      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll')
+      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll', {
+        params: queryParams,
+      })
       .pipe(
         tap((res) => {
           const school = res.data.schoolsUrl;
@@ -204,5 +228,21 @@ export class SchoolService {
     this.deleteFromDb(toDelete._id);
     this.schools.splice(id, 1);
     this.schoolsChanged.next(this.schools.slice());
+  }
+
+  filter(fieldName: string, fieldValue: string) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('fieldName', fieldName);
+    queryParams = queryParams.append('fieldValue', fieldValue);
+    return this.http
+      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll', {
+        params: queryParams,
+      })
+      .pipe(
+        tap((res) => {
+          const school = res.data.schoolsUrl;
+          this.setSchools(school);
+        })
+      );
   }
 }

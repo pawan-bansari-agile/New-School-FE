@@ -15,7 +15,7 @@ import { CountResponse, DashBoardService } from './dashboard.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  schools: School[];
+  schools: School[] = [];
   school: School;
   user: User;
   isAuthenticated: string = '';
@@ -24,6 +24,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalStudCnt: number;
   countResponse = [];
   error: string = null;
+  pageNumber: number;
+  limit: number;
+  keyword: string;
+  sortBy: string = '';
+  sortOrder: string = '';
   // students: Student[];
 
   constructor(
@@ -46,9 +51,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
     if (this.user) {
-      this.dashService.fetchSchools().subscribe((res) => {
-        this.schools = this.dashService.getSchools();
-      });
+      this.dashService
+        .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.dashService.getSchools();
+          this.pageNumber = +res.data.pageNumber;
+          this.limit = +res.data.limit;
+        });
       this.dashService.getTotalCount().subscribe((res) => {
         this.totalStudCnt = res.data[0].total;
       });
@@ -72,5 +81,75 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userSub.unsubscribe();
     this.schoolSub.unsubscribe();
+  }
+
+  decrease() {
+    if (this.pageNumber != 1) {
+      this.pageNumber--;
+      this.dashService
+        .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.dashService.getSchools();
+          // this.pageNumber = +res.data.pageNumber;
+          // this.limit = +res.data.limit;
+        });
+    }
+  }
+
+  increase() {
+    if (this.schools.length != 0) {
+      this.pageNumber++;
+      this.dashService
+        .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.dashService.getSchools();
+          // this.pageNumber = +res.data.pageNumber;
+          // this.limit = +res.data.limit;
+        });
+    }
+    // if (this.schools.length == 0 && this.pageNumber > 1) {
+    //   this.pageNumber = 1;
+    // }
+  }
+
+  change(form) {
+    console.log('value from entries input', form.value);
+    this.limit = form.value.entries;
+    this.dashService
+      .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
+      .subscribe((res) => {
+        this.schools = this.dashService.getSchools();
+        this.pageNumber = +res.data.pageNumber;
+        this.limit = +res.data.limit;
+      });
+  }
+
+  search(form) {
+    console.log('value from search input', form.value);
+    this.keyword = form.value.search;
+    this.dashService
+      .fetchSchools('', '', this.keyword, '', '')
+      .subscribe((res) => {
+        console.log('res from search method', res);
+
+        this.schools = this.dashService.getSchools();
+        // this.pageNumber = +res.data.pageNumber;
+        // this.limit = +res.data.limit;
+      });
+  }
+
+  sort(form) {
+    console.log('value from sorting method', form.value);
+    this.sortBy = form.value.sortBy;
+    this.sortOrder = form.value.sortOrder;
+    this.dashService
+      .fetchSchools('', '', '', this.sortBy, this.sortOrder)
+      .subscribe((res) => {
+        console.log('res from search method', res);
+
+        this.schools = this.dashService.getSchools();
+        // this.pageNumber = +res.data.pageNumber;
+        // this.limit = +res.data.limit;
+      });
   }
 }

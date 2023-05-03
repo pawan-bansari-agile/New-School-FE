@@ -11,11 +11,13 @@ import { SchoolService } from '../school.service';
 export class SchoolListComponent implements OnInit {
   schools: School[];
   error: string = null;
-  pageSize: number = 5;
-  currentPage: number = 1;
-  totalPages: number;
-  pages: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-  searchQuery: string;
+  fieldName: string = '';
+  fieldValue: string = '';
+  pageNumber: number;
+  limit: number;
+  keyword: string;
+  sortBy: string = '';
+  sortOrder: string = '';
 
   constructor(
     private schoolService: SchoolService,
@@ -27,7 +29,12 @@ export class SchoolListComponent implements OnInit {
     this.schoolService.schoolsChanged.subscribe((schools: School[]) => {
       this.schools = schools;
     });
-    this.schoolService.onInint().subscribe();
+    this.schoolService
+      .onInint('', '', '', '', '', this.pageNumber, this.limit)
+      .subscribe((res) => {
+        this.pageNumber = +res.data.pageNumber;
+        this.limit = +res.data.limit;
+      });
     this.schools = this.schoolService.getSchools();
     this.schoolService.errorEmitter.subscribe((err) => {
       this.error = err;
@@ -46,5 +53,82 @@ export class SchoolListComponent implements OnInit {
 
   onHandleError() {
     this.error = null;
+  }
+
+  filterOpts(form) {
+    console.log('value from filter method', form.value);
+    this.fieldName = form.value.fieldName;
+    this.fieldValue = form.value.fieldValue;
+    this.schoolService
+      .filter(this.fieldName, this.fieldValue)
+      .subscribe((res) => {
+        this.schools = res.data.schoolsUrl;
+      });
+  }
+
+  change(form) {
+    this.limit = form.value.entries;
+    this.schoolService
+      .onInint('', '', '', '', '', this.pageNumber, this.limit)
+      .subscribe((res) => {
+        this.schools = this.schoolService.getSchools();
+        this.pageNumber = +res.data.pageNumber;
+        this.limit = +res.data.limit;
+      });
+  }
+
+  search(form) {
+    console.log('value from search input', form.value);
+    this.keyword = form.value.search;
+    this.schoolService
+      .onInint('', '', this.keyword, '', '')
+      .subscribe((res) => {
+        console.log('res from search method', res);
+
+        this.schools = this.schoolService.getSchools();
+        // this.pageNumber = +res.data.pageNumber;
+        // this.limit = +res.data.limit;
+      });
+  }
+
+  sort(form) {
+    console.log('value from sorting method', form.value);
+    this.sortBy = form.value.sortBy;
+    this.sortOrder = form.value.sortOrder;
+    this.schoolService
+      .onInint('', '', '', this.sortBy, this.sortOrder)
+      .subscribe((res) => {
+        console.log('res from search method', res);
+
+        this.schools = this.schoolService.getSchools();
+        // this.pageNumber = +res.data.pageNumber;
+        // this.limit = +res.data.limit;
+      });
+  }
+
+  decrease() {
+    if (this.pageNumber != 1) {
+      this.pageNumber--;
+      this.schoolService
+        .onInint('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.schoolService.getSchools();
+          // this.pageNumber = +res.data.pageNumber;
+          // this.limit = +res.data.limit;
+        });
+    }
+  }
+
+  increase() {
+    if (this.schools.length != 0) {
+      this.pageNumber++;
+      this.schoolService
+        .onInint('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.schoolService.getSchools();
+          // this.pageNumber = +res.data.pageNumber;
+          // this.limit = +res.data.limit;
+        });
+    }
   }
 }

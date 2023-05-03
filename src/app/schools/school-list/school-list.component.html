@@ -4,12 +4,50 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <input type="text" class="form-control" placeholder="Search"
-    [(ngModel)]="searchQuery">
-  </div>
-</div>
-<div class="row">
-  <div class="col-xs-12">
+      <form (ngSubmit)="change(f)" #f="ngForm">
+      <label for="entries">Entries</label>
+      <input type="text" id="entries" ngModel name="entries" placeholder="{{limit}} / page">
+      <button type="submit">Submit</button>
+      </form>
+      <form (ngSubmit)="search(s)" #s="ngForm">
+        <label for="search">Search:</label>
+        <input type="text" id="search" ngModel name="search" placeholder="Search...">
+        <button type="submit">Go</button>
+      </form>
+      <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
+        <div class="sorting-container">
+          <div class="sorting-bar">
+            <label for="sortBy">Sort by:</label>
+            <select id="sortBy" name="sortBy" ngModel>
+              <option value="">-</option>
+              <option value="name">School Name</option>
+              <option value="address">Address</option>
+              <option value="city">City</option>
+            </select>
+          </div>
+          <div class="sorting-bar">
+            <label for="sortOrder">Sort Order:</label>
+            <select id="sortOrder" name="sortOrder" ngModel>
+              <option value="">-</option>
+              <option value="1">Ascending</option>
+              <option value="-1">Descending</option>
+            </select>
+          </div>
+          <button type="submit" class="search-btn">Go</button>
+        </div>
+      </form>
+      <div class="filter-bar">
+        <form (ngSubmit)="filterOpts(filter)" #filter="ngForm">
+          <label for="fieldName">Category:</label>
+          <select id="fieldName" name="fieldName" [(ngModel)]="fieldName">
+            <option value="">-</option>
+            <option value="city">City</option>
+          </select>
+          <label for="fieldValue">Value:</label>
+          <input id="fieldValue" name="fieldValue" ngModel placeholder="Enter existing city name!" [disabled]="!fieldName">
+          <button type="submit">Filter</button>
+        </form>
+      </div>
     <table class="table">
       <thead>
         <tr>
@@ -20,7 +58,7 @@
           <th>Details</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody *ngIf="schools.length > 0; else NoData">
         <tr *ngFor="let school of schools; let i = index"
         [ngClass]="{'active': selectedIndex === i}"
         (click)="selectedIndex = i">
@@ -31,26 +69,30 @@
           <td><button [routerLink]='[i]'>View</button></td>
         </tr>
       </tbody>
+      <ng-template #NoData>
+        <p>End Of Data!</p>
+      </ng-template>
     </table>
-    <div class="text-center">
-      <ul class="pagination">
-        <li [class.disabled]="currentPage <= 1">
-          <a (click)="currentPage = 1">First</a>
-        </li>
-        <li [class.disabled]="currentPage <= 1">
-          <a (click)="currentPage = currentPage - 1">Previous</a>
-        </li>
-        <li *ngFor="let page of pages"
-        [class.active]="currentPage == page">
-          <a (click)="currentPage = page">{{ page }}</a>
-        </li>
-        <li [class.disabled]="currentPage == totalPages">
-          <a (click)="currentPage = currentPage + 1">Next</a>
-        </li>
-        <li [class.disabled]="currentPage == totalPages">
-          <a (click)="currentPage = totalPages">Last</a>
-        </li>
-      </ul>
+    <div style="display: flex; justify-content: center;">
+      <nav>
+        <ul class="pagination">
+          <!-- <li [ngClass]="{disabled: pageNumber === 1}" class="page-item">
+            <a (click)="setPage(1)" class="page-link">First</a>
+          </li> -->
+          <li [ngClass]="{disabled: pageNumber === 1}" class="page-item">
+            <a (click)="decrease()" class="page-link" style="cursor: pointer;">Previous</a>
+          </li>
+          <li [ngClass]="{active: pageNumber === pageNumber}" class="page-item">
+            <a >{{ pageNumber }}</a>
+          </li>
+          <li [ngClass]="{disabled: this.schools.length == 0}" class="page-item">
+            <a (click)="increase()" class="page-link" style="cursor: pointer;">Next</a>
+          </li>
+          <!-- <li [ngClass]="{disabled: pageNumber === totalPages}" class="page-item">
+            <a (click)="setPage(totalPages)" class="page-link">Last</a>
+          </li> -->
+        </ul>
+      </nav>
     </div>
   </div>
 </div>

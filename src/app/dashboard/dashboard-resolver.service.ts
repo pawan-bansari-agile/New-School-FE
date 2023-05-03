@@ -23,7 +23,7 @@ export class DashResolver implements Resolve<SchoolSearchResponse | School[]> {
     | School[] {
     const schools = this.dashService.getSchools();
     if (schools.length === 0) {
-      return this.dashService.fetchSchools();
+      return this.dashService.fetchSchools('', '', '', '', '');
     } else {
       return schools;
     }

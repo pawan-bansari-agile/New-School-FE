@@ -22,7 +22,7 @@ export interface TotalStudCount {
   data: [
     {
       total: number;
-    },
+    }
   ];
 }
 
@@ -31,7 +31,7 @@ export class DashBoardService {
   constructor(
     private schoolService: SchoolService,
     private studentService: StudentService,
-    private http: HttpClient,
+    private http: HttpClient
   ) {}
 
   schools: School[] = [];
@@ -41,16 +41,38 @@ export class DashBoardService {
   errorEmitter = new BehaviorSubject<string>(null);
   updatedSchool = new BehaviorSubject<School>(null);
 
-  fetchSchools() {
+  fetchSchools(
+    fieldName: string,
+    fieldValue: string,
+    keyword: string,
+    sortBy: string,
+    sortOrder: string,
+    pageNumber?: number,
+    limit?: number
+  ) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('fieldName', fieldName);
+    queryParams = queryParams.append('fieldValue', fieldValue);
+    if (pageNumber) {
+      queryParams = queryParams.append('pageNumber', pageNumber);
+    }
+    if (limit) {
+      queryParams = queryParams.append('limit', limit);
+    }
+    queryParams = queryParams.append('keyword', keyword);
+    queryParams = queryParams.append('sortBy', sortBy);
+    queryParams = queryParams.append('sortOrder', sortOrder);
     return this.http
-      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll')
+      .get<SchoolSearchResponse>('http://localhost:3000/school/findAll', {
+        params: queryParams,
+      })
       .pipe(
         tap((res) => {
           const school = res.data.schoolsUrl;
           console.log('from fetchschools dash service', school);
 
           this.setSchools(school);
-        }),
+        })
       );
   }
 
@@ -84,7 +106,7 @@ export class DashBoardService {
     queryParams = queryParams.append('school', schlName);
     return this.http.get<CountResponse>(
       'http://localhost:3000/students/totalCount',
-      { params: queryParams },
+      { params: queryParams }
     );
   }
 
@@ -94,7 +116,7 @@ export class DashBoardService {
       .pipe(
         tap((res: TotalStudCount) => {
           return res.data[0].total;
-        }),
+        })
       );
   }
 
@@ -149,8 +171,8 @@ export class DashBoardService {
           //   }
           //   return throwError(errorMessage);
           // }
-          handleError,
-        ),
+          handleError
+        )
       );
     // .subscribe((res) => {
     //   console.log('res from update call', res);

@@ -16,7 +16,7 @@ export class SchoolResolver
 
   resolve(
     route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
+    state: RouterStateSnapshot
   ):
     | SchoolSearchResponse
     | Observable<SchoolSearchResponse>
@@ -24,7 +24,7 @@ export class SchoolResolver
     | School[] {
     const schools = this.schoolService.getSchools();
     if (schools.length === 0) {
-      return this.schoolService.onInint();
+      return this.schoolService.onInint('', '', '', '', '');
     } else {
       return schools;
     }
