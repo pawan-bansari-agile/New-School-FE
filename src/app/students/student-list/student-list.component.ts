@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from '../student.model';
 import { StudentService } from '../student.service';
+import { StatusUpdateRes } from '../student.service';
 
 @Component({
   selector: 'app-student-list',
@@ -35,5 +36,22 @@ export class StudentListComponent implements OnInit {
 
   onHandleError() {
     this.error = null;
+  }
+
+  updateStatus(i, student) {
+    console.log('student from student component', student);
+    const payload = {
+      status: !student.status,
+    };
+    console.log('student from status update call', student);
+
+    this.studentService.updateStatus(student._id, payload).subscribe(
+      (res: StatusUpdateRes) => {
+        this.students[i] = res.data.updatedDetails;
+      },
+      (err) => {
+        console.log('erro from status update call', err);
+      }
+    );
   }
 }

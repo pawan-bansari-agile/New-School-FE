@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashService: DashBoardService,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute,
+    private route: ActivatedRoute
   ) {}
 
   ngOnInit() {
@@ -65,7 +65,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     });
   }
 
-  onUpdate(school) {
+  onUpdate() {
     this.router.navigate(['edit'], { relativeTo: this.route });
   }
 

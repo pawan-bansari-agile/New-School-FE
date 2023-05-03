@@ -24,7 +24,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private dashService: DashBoardService, // private schoolService: SchoolService,
+    private dashService: DashBoardService // private schoolService: SchoolService,
   ) {}
 
   ngOnDestroy(): void {
@@ -119,7 +119,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
           (res: SchoolUpdateResponse) => {
             console.log(
               'response from update school call',
-              res.data.updatedDetails.photo,
+              res.data.updatedDetails.photo
             );
 
             // this.schoolService.updateSchool(
@@ -130,7 +130,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             // );
             this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
-            // this.authService.school.next(res.data.updatedDetails);
+            this.authService.school.next({
+              ...this.school,
+              ...res.data.updatedDetails,
+            });
             this.onCancel();
             // this.isLoading = false;
           },
@@ -139,7 +142,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             // this.errorEmitter.next(err);
             this.dashService.errorEmitter.next(err);
             // this.isLoading = false;
-          },
+          }
         );
     } else {
       // this.isLoading = true;
@@ -154,7 +157,10 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             // );
             this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
-            // this.authService.school.next(res.data.updatedDetails);
+            this.authService.school.next({
+              ...this.school,
+              ...res.data.updatedDetails,
+            });
             this.onCancel();
             // this.isLoading = false;
           },
@@ -163,7 +169,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
             // this.errorEmitter.next(err);
             this.dashService.errorEmitter.next(err);
             // this.isLoading = false;
-          },
+          }
         );
     }
     // } else {

@@ -40,6 +40,13 @@ export function handleError(errRes: HttpErrorResponse) {
   return throwError(errorMessage);
 }
 
+export interface StatusUpdateRes {
+  data: {
+    updatedDetails: Student;
+    message: string;
+  };
+}
+
 @Injectable()
 export class StudentService {
   studentsChanged = new Subject<Student[]>();
@@ -227,5 +234,19 @@ export class StudentService {
     this.deleteFromDb(toDelete._id);
     this.students.splice(id, 1);
     this.studentsChanged.next(this.students.slice());
+  }
+
+  updateStatus(id: string, payload) {
+    let queryParams = new HttpParams();
+    queryParams = queryParams.append('id', id);
+    // const fd = new FormData();
+    // fd.append;
+    return this.http.patch(
+      'http://localhost:3000/students/update/isActive',
+      payload,
+      {
+        params: queryParams,
+      }
+    );
   }
 }
