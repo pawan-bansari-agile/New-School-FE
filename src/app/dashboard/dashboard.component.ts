@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
-  // students: Student[];
 
   constructor(
     private dashService: DashBoardService,
@@ -47,7 +46,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       if (school) {
         this.isAuthenticated = school?.role;
         this.school = school;
-        console.log('school from dashboard', school);
       }
     });
     if (this.user) {
@@ -66,7 +64,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .standCount(this.school.name)
         .subscribe((res: CountResponse) => {
           this.countResponse = res.data;
-          console.log('from dascomp', this.countResponse);
         });
     }
     this.dashService.errorEmitter.subscribe((err) => {
@@ -90,8 +87,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.schools = this.dashService.getSchools();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
   }
@@ -103,17 +98,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.schools = this.dashService.getSchools();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
-    // if (this.schools.length == 0 && this.pageNumber > 1) {
-    //   this.pageNumber = 1;
-    // }
   }
 
   change(form) {
-    console.log('value from entries input', form.value);
     this.limit = form.value.entries;
     this.dashService
       .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
@@ -125,31 +114,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   search(form) {
-    console.log('value from search input', form.value);
     this.keyword = form.value.search;
     this.dashService
       .fetchSchools('', '', this.keyword, '', '')
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.schools = this.dashService.getSchools();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 
   sort(form) {
-    console.log('value from sorting method', form.value);
     this.sortBy = form.value.sortBy;
     this.sortOrder = form.value.sortOrder;
     this.dashService
       .fetchSchools('', '', '', this.sortBy, this.sortOrder)
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.schools = this.dashService.getSchools();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 }

@@ -41,12 +41,6 @@ export class SchoolListComponent implements OnInit {
     });
   }
 
-  // setError(value) {
-  //   console.log('value from set error ', value);
-
-  //   this.error = value;
-  // }
-
   onNewSchool() {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
@@ -56,7 +50,6 @@ export class SchoolListComponent implements OnInit {
   }
 
   filterOpts(form) {
-    console.log('value from filter method', form.value);
     this.fieldName = form.value.fieldName;
     this.fieldValue = form.value.fieldValue;
     this.schoolService
@@ -78,31 +71,21 @@ export class SchoolListComponent implements OnInit {
   }
 
   search(form) {
-    console.log('value from search input', form.value);
     this.keyword = form.value.search;
     this.schoolService
       .onInint('', '', this.keyword, '', '')
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.schools = this.schoolService.getSchools();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 
   sort(form) {
-    console.log('value from sorting method', form.value);
     this.sortBy = form.value.sortBy;
     this.sortOrder = form.value.sortOrder;
     this.schoolService
       .onInint('', '', '', this.sortBy, this.sortOrder)
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.schools = this.schoolService.getSchools();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 
@@ -113,8 +96,6 @@ export class SchoolListComponent implements OnInit {
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.schools = this.schoolService.getSchools();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
   }
@@ -126,8 +107,6 @@ export class SchoolListComponent implements OnInit {
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.schools = this.schoolService.getSchools();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
   }

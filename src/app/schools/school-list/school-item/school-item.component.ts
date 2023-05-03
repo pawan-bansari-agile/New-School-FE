@@ -25,8 +25,7 @@ export class SchoolItemComponent implements OnInit {
 
   file: File;
   imageUrl: any;
-  // error: string = null;
-  // errorEmitter = new BehaviorSubject<string>(null);
+
   isLoading = false;
 
   constructor(
@@ -51,7 +50,6 @@ export class SchoolItemComponent implements OnInit {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
-      // reader.readAsDataURL(this.file);
     }
   }
 
@@ -70,7 +68,6 @@ export class SchoolItemComponent implements OnInit {
       name = school.name;
       email = school.email;
       address = school.address;
-      // file = school.photo;
       zipCode = school.zipCode;
       city = school.city;
       state = school.state;
@@ -88,7 +85,6 @@ export class SchoolItemComponent implements OnInit {
       address: new FormControl(address, [
         Validators.required,
         Validators.pattern(/^\S.*\S$/),
-        // this.noWhitespaceValidator,
       ]),
       file: new FormControl(file),
       zipCode: new FormControl(zipCode, [
@@ -118,23 +114,15 @@ export class SchoolItemComponent implements OnInit {
           .updateInDb(this.id, this.schoolForm.value, this.file)
           .subscribe(
             (res: SchoolUpdateResponse) => {
-              console.log(
-                'response from update school call',
-                res.data.updatedDetails.photo
-              );
-
               this.schoolService.updateSchool(
                 this.id,
                 res.data.updatedDetails,
-                // this.file
                 res.data.updatedDetails.photo
               );
               this.router.navigate(['/schools']);
               this.isLoading = false;
             },
             (err) => {
-              // this.error = err;
-              // this.errorEmitter.next(err);
               this.schoolService.errorEmitter.next(err);
               this.isLoading = false;
             }
@@ -154,8 +142,6 @@ export class SchoolItemComponent implements OnInit {
               this.isLoading = false;
             },
             (err) => {
-              // this.error = err;
-              // this.errorEmitter.next(err);
               this.schoolService.errorEmitter.next(err);
               this.isLoading = false;
             }
@@ -166,9 +152,6 @@ export class SchoolItemComponent implements OnInit {
         this.isLoading = true;
         this.schoolService.addInDb(this.schoolForm.value, this.file).subscribe(
           (res: SchoolLoginResponse) => {
-            console.log('response from add school call', res);
-
-            console.log('response from add in db call from school', res);
             this.schoolService.addSchool(
               this.schoolForm.value,
               res.data.user.photo
@@ -176,8 +159,6 @@ export class SchoolItemComponent implements OnInit {
             this.isLoading = false;
           },
           (err) => {
-            // this.error = err;
-            // this.errorEmitter.next(err);
             this.schoolService.errorEmitter.next(err);
             this.isLoading = false;
           }
@@ -186,17 +167,10 @@ export class SchoolItemComponent implements OnInit {
         this.isLoading = true;
         this.schoolService.addInDb(this.schoolForm.value, null).subscribe(
           (res: SchoolLoginResponse) => {
-            console.log('photo', res.data.user.photo);
-
-            console.log('response from add in db call from school', res);
             this.schoolService.addSchool(this.schoolForm.value, null);
             this.isLoading = false;
           },
           (err) => {
-            console.log('err from school add', err);
-
-            // this.error = err;
-            // this.errorEmitter.next(err);
             this.schoolService.errorEmitter.next(err);
             this.isLoading = false;
           }

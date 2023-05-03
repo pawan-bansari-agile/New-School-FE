@@ -69,7 +69,6 @@ export class DashBoardService {
       .pipe(
         tap((res) => {
           const school = res.data.schoolsUrl;
-          console.log('from fetchschools dash service', school);
 
           this.setSchools(school);
         })
@@ -77,29 +76,16 @@ export class DashBoardService {
   }
 
   setSchools(schools: School[]) {
-    console.log('from set schools dah service', schools);
-
     this.schools = schools;
-    // this.schoolsChanged.next(this.schools.slice());
   }
 
   getSchools() {
-    console.log('from getschools dash service', this.schools);
-
     return this.schools.slice();
   }
 
   getSchoolById(id: number) {
     return this.schools[id];
   }
-
-  // getStudents(id: string) {
-  //   let queryParams = new HttpParams();
-  //   // queryParams = queryParams.append();
-  //   return this.http.get<StudentSearchResponse>(
-  //     'http://localhost:3000/students/findAll'
-  //   );
-  // }
 
   standCount(schlName: string) {
     let queryParams = new HttpParams();
@@ -121,20 +107,6 @@ export class DashBoardService {
   }
 
   updateInDb(id, school: School, file) {
-    // const toUpdate = this.getSchoolById(id);
-    // console.log('toUpdate from updateschool call', toUpdate);
-    // console.log('school from updateschool call', school);
-    // const updatedSchool = {
-    //   name: school.name,
-    //   email: school.email,
-    //   address: school.address,
-    //   photo: school.photo ? school.photo : '',
-    //   zipCode: school.zipCode,
-    //   city: school.city,
-    //   state: school.state,
-    //   country: school.country,
-    // };
-
     const fd = new FormData();
     fd.append('name', school.name);
     fd.append('email', school.email);
@@ -149,7 +121,6 @@ export class DashBoardService {
     fd.append('city', school.city);
     fd.append('state', school.state);
     fd.append('country', school.country);
-    console.log('fd from updateschool call', fd);
 
     let queryParams = new HttpParams();
     queryParams = queryParams.append('id', id);
@@ -157,25 +128,6 @@ export class DashBoardService {
       .patch('http://localhost:3000/school/update', fd, {
         params: queryParams,
       })
-      .pipe(
-        catchError(
-          //   (errRes) => {
-          //   let errorMessage = 'An unknown error occured!';
-          //   if (!errRes.error || !errRes.error.message) {
-          //     return throwError(errorMessage);
-          //   }
-          //   switch (errRes.error.message) {
-          //     case 'School not found!':
-          //       errorMessage = 'School not found!';
-          //       break;
-          //   }
-          //   return throwError(errorMessage);
-          // }
-          handleError
-        )
-      );
-    // .subscribe((res) => {
-    //   console.log('res from update call', res);
-    // });
+      .pipe(catchError(handleError));
   }
 }

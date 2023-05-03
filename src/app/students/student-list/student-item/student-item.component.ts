@@ -28,7 +28,6 @@ export class StudentItemComponent implements OnInit {
   file: File;
   imageUrl: any;
 
-  // error: string = null;
   isLoading = false;
 
   constructor(
@@ -53,7 +52,6 @@ export class StudentItemComponent implements OnInit {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
-      // reader.readAsDataURL(this.file);
     }
   }
 
@@ -64,7 +62,6 @@ export class StudentItemComponent implements OnInit {
     let std;
     let file;
     let dob;
-    // let status;
     let school;
 
     if (this.editMode) {
@@ -73,9 +70,7 @@ export class StudentItemComponent implements OnInit {
       parentNumber = student.parentNumber;
       address = student.address;
       std = student.std;
-      // file = student.photo;
       dob = student.dob;
-      // status = student.status;
       school = student.school;
     }
     this.studentForm = new FormGroup({
@@ -153,7 +148,6 @@ export class StudentItemComponent implements OnInit {
               this.isLoading = false;
             },
             (err) => {
-              // this.error = err;
               this.studentService.errorEmitter.next(err);
               this.isLoading = false;
             }
@@ -166,7 +160,6 @@ export class StudentItemComponent implements OnInit {
             this.isLoading = false;
           },
           (err) => {
-            // this.error = err;
             this.studentService.errorEmitter.next(err);
             this.isLoading = false;
           }

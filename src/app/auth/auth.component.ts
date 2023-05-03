@@ -28,12 +28,10 @@ export class AuthComponent implements OnInit {
     if (this.isLoginMode) {
       this.authService.loginAsAdmin(this.authForm.value).subscribe(
         (res) => {
-          console.log('response from admin call', res);
           this.isLoading = false;
           this.router.navigate(['/dashboard']);
         },
         (error) => {
-          console.log('error from admin call', error);
           this.error = error;
           this.isLoading = false;
         }
@@ -41,12 +39,10 @@ export class AuthComponent implements OnInit {
     } else {
       this.authService.loginAsSchool(this.authForm.value).subscribe(
         (res) => {
-          console.log('response from school login call', res);
           this.isLoading = false;
           this.router.navigate(['/dashboard']);
         },
         (err) => {
-          console.log('error from school call', err);
           this.error = err;
           this.isLoading = false;
         }

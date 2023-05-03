@@ -51,19 +51,15 @@ export class StudentListComponent implements OnInit {
   }
 
   updateStatus(i, student) {
-    console.log('student from student component', student);
     const payload = {
       status: !student.status,
     };
-    console.log('student from status update call', student);
 
     this.studentService.updateStatus(student._id, payload).subscribe(
       (res: StatusUpdateRes) => {
         this.students[i] = res.data.updatedDetails;
       },
-      (err) => {
-        console.log('erro from status update call', err);
-      }
+      (err) => {}
     );
   }
 
@@ -79,43 +75,30 @@ export class StudentListComponent implements OnInit {
   }
 
   search(form) {
-    console.log('value from search input', form.value);
     this.keyword = form.value.search;
     this.studentService
       .onInint('', '', this.keyword, '', '')
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.students = this.studentService.getStudents();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 
   sort(form) {
-    console.log('value from sorting method', form.value);
     this.sortBy = form.value.sortBy;
     this.sortOrder = form.value.sortOrder;
     this.studentService
       .onInint('', '', '', this.sortBy, this.sortOrder)
       .subscribe((res) => {
-        console.log('res from search method', res);
-
         this.students = this.studentService.getStudents();
-        // this.pageNumber = +res.data.pageNumber;
-        // this.limit = +res.data.limit;
       });
   }
 
   filterOpts(form) {
-    console.log('value from filter method', form.value);
     this.fieldName = form.value.fieldName;
     this.fieldValue = form.value.fieldValue;
     this.studentService
       .filter(this.fieldName, this.fieldValue)
       .subscribe((res) => {
-        console.log('res from filter method call', res);
-
         this.students = res.data.studentUrl;
       });
   }
@@ -127,8 +110,6 @@ export class StudentListComponent implements OnInit {
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.students = this.studentService.getStudents();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
   }
@@ -140,8 +121,6 @@ export class StudentListComponent implements OnInit {
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
           this.students = this.studentService.getStudents();
-          // this.pageNumber = +res.data.pageNumber;
-          // this.limit = +res.data.limit;
         });
     }
   }

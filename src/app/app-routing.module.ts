@@ -28,7 +28,6 @@ const appRoutes: Routes = [
       {
         path: 'edit',
         component: ProfileEditComponent,
-        // resolve: [DashResolver],
       },
       {
         path: ':id',

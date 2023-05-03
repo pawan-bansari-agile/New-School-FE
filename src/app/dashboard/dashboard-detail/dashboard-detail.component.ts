@@ -10,8 +10,6 @@ import { DashBoardService, StdCntRes } from '../dashboard.service';
   styleUrls: ['./dashboard-detail.component.css'],
 })
 export class DashboardDetailComponent implements OnInit {
-  // totalStudentCount: number = 0;
-  // standard: number = 0;
   id: number;
   school: School;
   CountRes: StdCntRes[] = [];
@@ -26,24 +24,13 @@ export class DashboardDetailComponent implements OnInit {
     this.route.params.subscribe((params: Params) => {
       this.id = +params['id'];
       this.school = this.dashService.getSchoolById(this.id);
-      console.log('school from dashboard deetail component', this.school);
       this.getDetails(this.school.name);
     });
   }
 
   getDetails(schoolName: string) {
-    console.log('this.school from getdetails method', this.school);
-
-    console.log('from getdetails method', schoolName);
-
     this.dashService.standCount(schoolName).subscribe((res) => {
-      console.log('res from count call', res);
-      // res.data.map((item) => {
-      //   this.standard = item._id;
-      //   this.totalStudentCount = item.count;
-      // });
       this.CountRes = res.data;
-      console.log('this.CountRes', this.CountRes);
     });
   }
 }

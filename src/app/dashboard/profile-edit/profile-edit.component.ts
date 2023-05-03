@@ -36,7 +36,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       if (school) {
         this.school = school;
         this.initForm();
-        console.log('school from profile edit component', this.school);
       }
     });
   }
@@ -49,7 +48,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       reader.onload = () => {
         this.imageUrl = reader.result;
       };
-      // reader.readAsDataURL(this.file);
     }
   }
 
@@ -64,17 +62,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     let state = this.school.state;
     let country = this.school.country;
 
-    // if (this.editMode) {
-    // const school = this.schoolService.getSchoolById(this.id);
-    // name = school.name;
-    // email = school.email;
-    // address = school.address;
-    // // file = school.photo;
-    // zipCode = school.zipCode;
-    // city = school.city;
-    // state = school.state;
-    // country = school.country;
-    // }
     this.schoolForm = new FormGroup({
       name: new FormControl(name, [
         Validators.required,
@@ -87,7 +74,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
       address: new FormControl(address, [
         Validators.required,
         Validators.pattern(/^\S.*\S$/),
-        // this.noWhitespaceValidator,
       ]),
       file: new FormControl(file),
       zipCode: new FormControl(zipCode, [
@@ -110,24 +96,11 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    // if (this.editMode) {
     if (this.file) {
-      // this.isLoading = true;
       this.dashService
         .updateInDb(this.school._id, this.schoolForm.value, this.file)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            console.log(
-              'response from update school call',
-              res.data.updatedDetails.photo
-            );
-
-            // this.schoolService.updateSchool(
-            //   this.school._id,
-            //   res.data.updatedDetails,
-            //   // this.file
-            //   res.data.updatedDetails.photo,
-            // );
             this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
             this.authService.school.next({
@@ -135,26 +108,16 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
               ...res.data.updatedDetails,
             });
             this.onCancel();
-            // this.isLoading = false;
           },
           (err) => {
-            // this.error = err;
-            // this.errorEmitter.next(err);
             this.dashService.errorEmitter.next(err);
-            // this.isLoading = false;
           }
         );
     } else {
-      // this.isLoading = true;
       this.dashService
         .updateInDb(this.school._id, this.schoolForm.value, null)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            // this.schoolService.updateSchool(
-            //   this.id,
-            //   res.data.updatedDetails,
-            //   null,
-            // );
             this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
             this.authService.school.next({
@@ -162,58 +125,12 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
               ...res.data.updatedDetails,
             });
             this.onCancel();
-            // this.isLoading = false;
           },
           (err) => {
-            // this.error = err;
-            // this.errorEmitter.next(err);
             this.dashService.errorEmitter.next(err);
-            // this.isLoading = false;
           }
         );
     }
-    // } else {
-    //   if (this.file) {
-    //     this.isLoading = true;
-    //     this.schoolService.addInDb(this.schoolForm.value, this.file).subscribe(
-    //       (res: SchoolLoginResponse) => {
-    //         console.log('response from add school call', res);
-
-    //         console.log('response from add in db call from school', res);
-    //         this.schoolService.addSchool(
-    //           this.schoolForm.value,
-    //           res.data.user.photo
-    //         );
-    //         this.isLoading = false;
-    //       },
-    //       (err) => {
-    //         // this.error = err;
-    //         // this.errorEmitter.next(err);
-    //         this.schoolService.errorEmitter.next(err);
-    //         this.isLoading = false;
-    //       }
-    //     );
-    //   } else {
-    //     this.isLoading = true;
-    //     this.schoolService.addInDb(this.schoolForm.value, null).subscribe(
-    //       (res: SchoolLoginResponse) => {
-    //         console.log('photo', res.data.user.photo);
-
-    //         console.log('response from add in db call from school', res);
-    //         this.schoolService.addSchool(this.schoolForm.value, null);
-    //         this.isLoading = false;
-    //       },
-    //       (err) => {
-    //         console.log('err from school add', err);
-
-    //         // this.error = err;
-    //         // this.errorEmitter.next(err);
-    //         this.schoolService.errorEmitter.next(err);
-    //         this.isLoading = false;
-    //       }
-    //     );
-    //   }
-    // }
     this.onCancel();
   }
 

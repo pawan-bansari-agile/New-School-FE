@@ -32,32 +32,10 @@ export class AuthService {
   tokenExpirationTimer: any;
 
   loginAsAdmin(form) {
-    // const fd = new FormData();
-    // fd.append('email', form.email);
-    // fd.append('password', form.password);
-    console.log(form);
-
     return this.http
       .post<UserLoginResponse>('http://localhost:3000/users/login', form)
       .pipe(
-        catchError(
-          //   (errRes) => {
-          //   let errorMessage: string = 'An unknown error occured!';
-          //   if (!errRes.error || !errRes.error.message) {
-          //     return throwError(errorMessage);
-          //   }
-          //   switch (errRes.error.message) {
-          //     case 'User not found!':
-          //       errorMessage = 'User not found!';
-          //       break;
-          //     case 'Bad Credentials!':
-          //       errorMessage = 'Bad Credentials!';
-          //       break;
-          //   }
-          //   return throwError(errorMessage);
-          // }
-          handleError
-        ),
+        catchError(handleError),
         tap((resData) => {
           const expirationDate = new Date(new Date().getTime() + 600 * 1000);
           const user = new User(
@@ -73,46 +51,22 @@ export class AuthService {
             resData.data.message,
             expirationDate
           );
-          console.log('user from login call', user);
 
           this.user.next(user);
           const expirationDuration =
             new Date(expirationDate).getTime() - new Date().getTime();
-          // console.log('+expirationDuration', expirationDuration);
 
           this.autoLogout(expirationDuration);
           localStorage.setItem('user', JSON.stringify(user));
         })
       );
-    // .subscribe((res) => {
-    //   console.log('response from admin login call', res);
-    // });
   }
 
   loginAsSchool(form) {
-    console.log('from school login', form);
-
     return this.http
       .post<SchoolLoginResponse>('http://localhost:3000/school/login', form)
       .pipe(
-        catchError(
-          //   (errRes) => {
-          //   let errorMessage: string = 'An unknown error occured!';
-          //   if (!errRes.error || !errRes.error.message) {
-          //     return throwError(errorMessage);
-          //   }
-          //   switch (errRes.error.message) {
-          //     case 'School not found!':
-          //       errorMessage = 'School not found!';
-          //       break;
-          //     case 'Bad Credentials!':
-          //       errorMessage = 'Bad Credentials!';
-          //       break;
-          //   }
-          //   return throwError(errorMessage);
-          // }
-          handleError
-        ),
+        catchError(handleError),
         tap((resData) => {
           const expirationDate = new Date(new Date().getTime() + 600 * 1000);
           const school = new School(
@@ -135,7 +89,6 @@ export class AuthService {
             resData.data.user.count,
             expirationDate
           );
-          console.log('school from school login call', school);
 
           this.school.next(school);
           const expirationDuration =
@@ -144,9 +97,6 @@ export class AuthService {
           localStorage.setItem('school', JSON.stringify(school));
         })
       );
-    // .subscribe((res) => {
-    //   console.log('response from school login call', res);
-    // });
   }
 
   logout() {

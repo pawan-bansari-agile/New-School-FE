@@ -11,7 +11,7 @@ export class User {
     public __v: number,
 
     public message: string,
-    public expirationDate?: Date,
+    public expirationDate?: Date
   ) {
     access_token = access_token;
     userName = userName;
@@ -25,11 +25,4 @@ export class User {
     message = message;
     expirationDate = expirationDate;
   }
-
-  // get token() {
-  //   if (!this.expirationDate || new Date() > this.expirationDate) {
-  //     return null;
-  //   }
-  //   return this.access_token;
-  // }
 }

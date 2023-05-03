@@ -57,22 +57,7 @@ export class StudentService {
 
   constructor(private http: HttpClient) {}
 
-  students: Student[] = [
-    // new Student(
-    //   'Test Id',
-    //   'Test Name',
-    //   7798813105,
-    //   'Test address',
-    //   1,
-    //   'https://medical.dpu.edu.in/images/infrastructure/infrastructure-new/Infrastructure-01.jpg',
-    //   new Date(),
-    //   true,
-    //   false,
-    //   'Test School Id',
-    //   1,
-    //   'Test Message',
-    // ),
-  ];
+  students: Student[] = [];
 
   updatedStudent: Student;
 
@@ -107,14 +92,6 @@ export class StudentService {
           this.setStudents(student);
         })
       );
-    //   .subscribe((students) => {
-    //     console.log('schools from school service', students);
-
-    //     const student = students.data.studentUrl;
-    //     this.setStudents(student);
-    //     console.log('result after fetching', this.students);
-    //   });
-    // console.log('after completing the call', this.students);
   }
 
   setStudents(students: Student[]) {
@@ -149,51 +126,17 @@ export class StudentService {
       .post('http://localhost:3000/students/create', fd, {
         params: queryParams,
       })
-      .pipe(
-        catchError(
-          // let errorMessage = 'An unknown error occured!';
-          // if (!errRes.error || !errRes.error.message) {
-          //   return throwError(errorMessage);
-          // }
-          // switch (errRes.error.message) {
-          //   case 'School not selected!':
-          //     errorMessage = 'School not selected!';
-          //     break;
-          //   case 'School not found!':
-          //     errorMessage = 'School not found!';
-          //     break;
-          // }
-          // return throwError(errorMessage);
-          handleError
-        )
-      );
-    // .subscribe((res) => {
-    //   console.log('res from create call', res);
-    // });
+      .pipe(catchError(handleError));
   }
 
   addStudent(student: Student, file) {
-    // this.addInDb(student, file);
     this.students.push(student);
-    console.log('students after adding', this.students);
 
     this.studentsChanged.next(this.students.slice());
   }
 
   updateInDb(id: number, student: Student, file) {
-    console.log('toUpdate from updateschool call', id);
-    console.log('school from updateschool call', student);
     const toUpdate = this.getStudentById(id);
-    // const updatedSchool = {
-    //   name: school.name,
-    //   email: school.email,
-    //   address: school.address,
-    //   photo: school.photo ? school.photo : '',
-    //   zipCode: school.zipCode,
-    //   city: school.city,
-    //   state: school.state,
-    //   country: school.country,
-    // };
 
     const fd = new FormData();
     fd.append('name', student.name);
@@ -204,7 +147,6 @@ export class StudentService {
       fd.append('file', file, file.name);
     }
     fd.append('dob', student.dob.toString());
-    console.log('fd from updateschool call', fd);
 
     let queryParams = new HttpParams();
     queryParams = queryParams.append('id', toUpdate._id);
@@ -212,31 +154,10 @@ export class StudentService {
       .patch('http://localhost:3000/students/update', fd, {
         params: queryParams,
       })
-      .pipe(
-        catchError(
-          //   (errRes) => {
-          //   let errorMessage = 'An unknown error occured!';
-          //   if (!errRes.error || !errRes.error.message) {
-          //     return throwError(errorMessage);
-          //   }
-          //   switch (errRes.error.message) {
-          //     case 'Student details not found!':
-          //       errorMessage = 'Student details not found!';
-          //       break;
-          //   }
-          //   return throwError(errorMessage);
-          // }
-          handleError
-        )
-      );
-    // .subscribe((res) => {
-    //   console.log('res from update call', res);
-    // });
+      .pipe(catchError(handleError));
   }
 
   updateStudent(id: number, student: Student, file) {
-    // const toUpdate = this.getStudentById(id);
-    // this.updateInDb(toUpdate._id, student, file);
     this.students[id] = student;
     this.studentsChanged.next(this.students.slice());
   }
@@ -248,9 +169,7 @@ export class StudentService {
       .delete('http://localhost:3000/students/delete', {
         params: queryParams,
       })
-      .subscribe((res) => {
-        console.log('response from delete call', res);
-      });
+      .subscribe((res) => {});
   }
 
   deleteStudent(id: number) {
@@ -263,8 +182,6 @@ export class StudentService {
   updateStatus(id: string, payload) {
     let queryParams = new HttpParams();
     queryParams = queryParams.append('id', id);
-    // const fd = new FormData();
-    // fd.append;
     return this.http.patch(
       'http://localhost:3000/students/update/isActive',
       payload,
