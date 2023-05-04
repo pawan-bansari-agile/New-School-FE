@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { AuthService } from 'src/app/auth/auth.service';
+import { User } from 'src/app/auth/user.model';
+import { School } from 'src/app/schools/school.model';
 import { Student } from '../student.model';
 import { StudentService } from '../student.service';
 import { StatusUpdateRes } from '../student.service';
@@ -9,7 +13,7 @@ import { StatusUpdateRes } from '../student.service';
   templateUrl: './student-list.component.html',
   styleUrls: ['./student-list.component.css'],
 })
-export class StudentListComponent implements OnInit {
+export class StudentListComponent implements OnInit, OnDestroy {
   students: Student[] = [];
   error: string = null;
   fieldName: string = '';
@@ -19,14 +23,31 @@ export class StudentListComponent implements OnInit {
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
+  userSub: Subscription;
+  user: User = null;
+  schoolSub: Subscription;
+  school: School = null;
+  role: string = '';
 
   constructor(
     private studentService: StudentService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authService: AuthService
   ) {}
+  ngOnDestroy(): void {
+    this.userSub.unsubscribe();
+    this.schoolSub.unsubscribe();
+  }
 
   ngOnInit(): void {
+    this.userSub = this.authService.user.subscribe((user) => {
+      this.user = user;
+    });
+    this.schoolSub = this.authService.school.subscribe((school) => {
+      this.school = school;
+    });
+    this.role = this.user ? this.user.role : this.school.role;
     this.studentService.studentsChanged.subscribe((students: Student[]) => {
       this.students = students;
     });
@@ -76,31 +97,37 @@ export class StudentListComponent implements OnInit {
 
   search(form) {
     this.keyword = form.value.search;
-    this.studentService
-      .onInint('', '', this.keyword, '', '')
-      .subscribe((res) => {
-        this.students = this.studentService.getStudents();
-      });
+    if (this.keyword) {
+      this.studentService
+        .onInint('', '', this.keyword, '', '')
+        .subscribe((res) => {
+          this.students = this.studentService.getStudents();
+        });
+    }
   }
 
   sort(form) {
     this.sortBy = form.value.sortBy;
     this.sortOrder = form.value.sortOrder;
-    this.studentService
-      .onInint('', '', '', this.sortBy, this.sortOrder)
-      .subscribe((res) => {
-        this.students = this.studentService.getStudents();
-      });
+    if (this.sortBy || this.sortOrder) {
+      this.studentService
+        .onInint('', '', '', this.sortBy, this.sortOrder)
+        .subscribe((res) => {
+          this.students = this.studentService.getStudents();
+        });
+    }
   }
 
   filterOpts(form) {
     this.fieldName = form.value.fieldName;
     this.fieldValue = form.value.fieldValue;
-    this.studentService
-      .filter(this.fieldName, this.fieldValue)
-      .subscribe((res) => {
-        this.students = res.data.studentUrl;
-      });
+    if (this.fieldName && this.fieldValue) {
+      this.studentService
+        .filter(this.fieldName, this.fieldValue)
+        .subscribe((res) => {
+          this.students = res.data.studentUrl;
+        });
+    }
   }
 
   decrease() {

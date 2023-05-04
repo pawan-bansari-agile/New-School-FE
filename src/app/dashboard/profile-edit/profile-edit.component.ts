@@ -24,7 +24,7 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
-    private dashService: DashBoardService // private schoolService: SchoolService,
+    private dashService: DashBoardService
   ) {}
 
   ngOnDestroy(): void {

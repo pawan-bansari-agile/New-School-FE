@@ -196,7 +196,7 @@ export class StudentService {
     queryParams = queryParams.append('fieldName', fieldName);
     queryParams = queryParams.append('fieldValue', fieldValue);
     return this.http
-      .get<StudentSearchResponse>('http://localhost:3000/school/findAll', {
+      .get<StudentSearchResponse>('http://localhost:3000/students/findAll', {
         params: queryParams,
       })
       .pipe(

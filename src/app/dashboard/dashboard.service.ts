@@ -114,9 +114,6 @@ export class DashBoardService {
     if (file) {
       fd.append('file', file, file.name);
     }
-    // else {
-    //   fd.append('file', null);
-    // }
     fd.append('zipCode', school.zipCode.toString());
     fd.append('city', school.city);
     fd.append('state', school.state);

@@ -41,7 +41,7 @@
           <label for="fieldName">Category:</label>
           <select id="fieldName" name="fieldName" [(ngModel)]="fieldName">
             <option value="">-</option>
-            <option value="school">School</option>
+            <option value="school.name" *ngIf="role == 'Admin'">School</option>
             <option value="std">Standard</option>
           </select>
 
@@ -58,6 +58,7 @@
           <th>Address</th>
           <th>Standard</th>
           <th>Status</th>
+          <th>School Name</th>
           <th>Details</th>
         </tr>
       </thead>
@@ -69,6 +70,7 @@
           <td>{{ student.address }}</td>
           <td>{{ student.std }}</td>
           <td>{{ student.status ? 'active' : 'inactive' }} <button (click)="updateStatus(i,student)">Change</button></td>
+          <td>{{ student.school.name }}</td>
           <td><button [routerLink]='[i]'>View</button></td>
         </tr>
       </tbody>

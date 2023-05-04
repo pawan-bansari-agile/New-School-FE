@@ -94,7 +94,6 @@ export class StudentItemComponent implements OnInit {
       ]),
       file: new FormControl(file),
       dob: new FormControl(dob, Validators.required),
-      // status: new FormControl(status),
       school: new FormControl(school, [
         Validators.required,
         Validators.pattern(/^\S.*\S$/),
@@ -115,7 +114,6 @@ export class StudentItemComponent implements OnInit {
               this.router.navigate(['/students']);
             },
             (err) => {
-              // this.error = err;
               this.studentService.errorEmitter.next(err);
               this.isLoading = false;
             }
@@ -131,7 +129,6 @@ export class StudentItemComponent implements OnInit {
               this.router.navigate(['/students']);
             },
             (err) => {
-              // this.error = err;
               this.studentService.errorEmitter.next(err);
               this.isLoading = false;
             }

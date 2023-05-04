@@ -52,11 +52,13 @@ export class SchoolListComponent implements OnInit {
   filterOpts(form) {
     this.fieldName = form.value.fieldName;
     this.fieldValue = form.value.fieldValue;
-    this.schoolService
-      .filter(this.fieldName, this.fieldValue)
-      .subscribe((res) => {
-        this.schools = res.data.schoolsUrl;
-      });
+    if (this.fieldName && this.fieldValue) {
+      this.schoolService
+        .filter(this.fieldName, this.fieldValue)
+        .subscribe((res) => {
+          this.schools = res.data.schoolsUrl;
+        });
+    }
   }
 
   change(form) {
