@@ -101,7 +101,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         .updateInDb(this.school._id, this.schoolForm.value, this.file)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            // this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
             const updatedDetails = {
               ...this.school,
@@ -124,7 +123,6 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         .updateInDb(this.school._id, this.schoolForm.value, null)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            // this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
             const updatedDetails = {
               ...this.school,
