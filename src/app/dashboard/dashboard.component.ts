@@ -122,9 +122,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
   }
 
-  sort(form) {
-    this.sortBy = form.value.sortBy;
-    this.sortOrder = form.value.sortOrder;
+  sort(name) {
+    this.sortOrder = this.sortOrder === '1' ? '-1' : '1';
+    this.sortBy = name;
     this.dashService
       .fetchSchools('', '', '', this.sortBy, this.sortOrder)
       .subscribe((res) => {

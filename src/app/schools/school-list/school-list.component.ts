@@ -9,6 +9,8 @@ import { SchoolService } from '../school.service';
   styleUrls: ['./school-list.component.css'],
 })
 export class SchoolListComponent implements OnInit {
+  availableCities: string[] = [];
+
   schools: School[];
   error: string = null;
   fieldName: string = '';
@@ -36,6 +38,14 @@ export class SchoolListComponent implements OnInit {
         this.limit = +res.data.limit;
       });
     this.schools = this.schoolService.getSchools();
+    this.schoolService.setCities().subscribe((res) => {
+      res.data.map((item) => {
+        if (!this.availableCities.includes(item.city)) {
+          this.availableCities.push(item.city);
+        }
+      });
+    });
+
     this.schoolService.errorEmitter.subscribe((err) => {
       this.error = err;
     });
@@ -81,9 +91,9 @@ export class SchoolListComponent implements OnInit {
       });
   }
 
-  sort(form) {
-    this.sortBy = form.value.sortBy;
-    this.sortOrder = form.value.sortOrder;
+  sort(name) {
+    this.sortOrder = this.sortOrder === '1' ? '-1' : '1';
+    this.sortBy = name;
     this.schoolService
       .onInint('', '', '', this.sortBy, this.sortOrder)
       .subscribe((res) => {

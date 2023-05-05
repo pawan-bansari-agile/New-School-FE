@@ -28,6 +28,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   schoolSub: Subscription;
   school: School = null;
   role: string = '';
+  values = [];
 
   constructor(
     private studentService: StudentService,
@@ -106,16 +107,14 @@ export class StudentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  sort(form) {
-    this.sortBy = form.value.sortBy;
-    this.sortOrder = form.value.sortOrder;
-    if (this.sortBy || this.sortOrder) {
-      this.studentService
-        .onInint('', '', '', this.sortBy, this.sortOrder)
-        .subscribe((res) => {
-          this.students = this.studentService.getStudents();
-        });
-    }
+  sort(name) {
+    this.sortOrder = this.sortOrder === '1' ? '-1' : '1';
+    this.sortBy = name;
+    this.studentService
+      .onInint('', '', '', this.sortBy, this.sortOrder)
+      .subscribe((res) => {
+        this.students = this.studentService.getStudents();
+      });
   }
 
   filterOpts(form) {
@@ -149,6 +148,24 @@ export class StudentListComponent implements OnInit, OnDestroy {
         .subscribe((res) => {
           this.students = this.studentService.getStudents();
         });
+    }
+  }
+
+  onFieldNameChange(fieldName) {
+    if (fieldName === 'school.name') {
+      this.studentService.getAllSchools().subscribe((res) => {
+        this.values = [];
+        res.data.map((item) => {
+          this.values.push(item.name);
+        });
+      });
+    } else if (fieldName === 'std') {
+      this.studentService.getAllStds().subscribe((res) => {
+        this.values = [];
+        res.data.map((item) => {
+          this.values.push(item.std);
+        });
+      });
     }
   }
 }

@@ -49,6 +49,22 @@ export interface StatusUpdateRes {
   };
 }
 
+export interface SchoolList {
+  data: [
+    {
+      name: string;
+    }
+  ];
+}
+
+export interface StdList {
+  data: [
+    {
+      std: number;
+    }
+  ];
+}
+
 @Injectable()
 export class StudentService {
   studentsChanged = new Subject<Student[]>();
@@ -205,5 +221,15 @@ export class StudentService {
           this.setStudents(school);
         })
       );
+  }
+
+  getAllSchools() {
+    return this.http.get<SchoolList>(
+      'http://localhost:3000/school/getAll/schools'
+    );
+  }
+
+  getAllStds() {
+    return this.http.get<StdList>('http://localhost:3000/students/getAllStds');
   }
 }

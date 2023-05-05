@@ -101,12 +101,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         .updateInDb(this.school._id, this.schoolForm.value, this.file)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            this.school = res.data.updatedDetails;
+            // this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
+            const updatedDetails = {
+              ...this.school,
+              ...res.data.updatedDetails,
+            };
             this.authService.school.next({
               ...this.school,
               ...res.data.updatedDetails,
             });
+            localStorage.removeItem('school');
+            localStorage.setItem('school', JSON.stringify(updatedDetails));
             this.onCancel();
           },
           (err) => {
@@ -118,12 +124,18 @@ export class ProfileEditComponent implements OnInit, OnDestroy {
         .updateInDb(this.school._id, this.schoolForm.value, null)
         .subscribe(
           (res: SchoolUpdateResponse) => {
-            this.school = res.data.updatedDetails;
+            // this.school = res.data.updatedDetails;
             this.imageUrl = res.data.updatedDetails.photo;
+            const updatedDetails = {
+              ...this.school,
+              ...res.data.updatedDetails,
+            };
             this.authService.school.next({
               ...this.school,
               ...res.data.updatedDetails,
             });
+            localStorage.removeItem('school');
+            localStorage.setItem('school', JSON.stringify(updatedDetails));
             this.onCancel();
           },
           (err) => {

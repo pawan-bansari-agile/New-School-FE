@@ -14,7 +14,7 @@
         <input type="text" id="search" ngModel name="search" placeholder="Search...">
         <button type="submit">Go</button>
       </form>
-      <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
+      <!-- <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
         <div class="sorting-container">
           <div class="sorting-bar">
             <label for="sortBy">Sort by:</label>
@@ -35,18 +35,21 @@
           </div>
           <button type="submit" class="search-btn">Go</button>
         </div>
-      </form>
+      </form> -->
       <div class="filter-bar">
         <form (ngSubmit)="filterOpts(filter)" #filter="ngForm">
           <label for="fieldName">Category:</label>
-          <select id="fieldName" name="fieldName" [(ngModel)]="fieldName">
+          <select id="fieldName" name="fieldName" [(ngModel)]="fieldName" (change)="onFieldNameChange(fieldName)">
             <option value="">-</option>
             <option value="school.name" *ngIf="role == 'Admin'">School</option>
             <option value="std">Standard</option>
           </select>
 
           <label for="fieldValue">Value:</label>
-          <input id="fieldValue" name="fieldValue" ngModel placeholder="Enter existing city name!" [disabled]="!fieldName">
+          <select id="fieldValue" name="fieldValue" ngModel [disabled]="!fieldName">
+            <option value="">-</option>
+            <option *ngFor="let value of values" [value]="value">{{ value }}</option>
+          </select>
 
           <button type="submit">Filter</button>
         </form>
@@ -54,10 +57,19 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th>Name</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('name')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">Name</th>
           <th>Address</th>
-          <th>Standard</th>
-          <th>Status</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('std')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">Standard</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('status')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">Status</th>
           <th>School Name</th>
           <th>Details</th>
         </tr>

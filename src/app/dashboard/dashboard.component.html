@@ -14,7 +14,7 @@
             <input type="text" id="search" ngModel name="search" placeholder="Search...">
             <button type="submit">Go</button>
           </form>
-          <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
+          <!-- <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
             <div class="sorting-container">
               <div class="sorting-bar">
                 <label for="sortBy">Sort by:</label>
@@ -34,14 +34,25 @@
               </div>
               <button type="submit" class="search-btn">Go</button>
             </div>
-          </form>
+          </form> -->
           <!-- <label for="currentPage">Page No:-</label>
           <input type="text" id="currentPage" placeholder="{{pageNumber}}"> -->
           <table class="table">
             <thead>
               <tr>
-                <th>School Name</th>
-                <th>Total Student Count</th>
+                <th
+                style="cursor: pointer;"
+                (click)="sort('name')"
+                [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}"
+                >School Name
+                </th>
+                <th
+                style="cursor: pointer;"
+                (click)="sort('count')"
+                [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}"
+                >
+                Total Student Count
+                </th>
                 <!-- <th>Email</th>
                 <th>Address</th>
                 <th>City</th>-->

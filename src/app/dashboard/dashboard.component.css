@@ -9,8 +9,14 @@
     height: 20px;
     line-height: 20px;
   } */
-  .search-btn {
+.search-btn {
     height: calc(100% - 4px);
     margin: 2px 0;
     line-height: 1;
+  }
+.arrow-up::after {
+    content: '\25B2'; /* upward-pointing triangle */
+  }
+.arrow-down::after {
+    content: '\25BC'; /* downward-pointing triangle */
   }

@@ -14,7 +14,7 @@
         <input type="text" id="search" ngModel name="search" placeholder="Search...">
         <button type="submit">Go</button>
       </form>
-      <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
+      <!-- <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
         <div class="sorting-container">
           <div class="sorting-bar">
             <label for="sortBy">Sort by:</label>
@@ -35,7 +35,7 @@
           </div>
           <button type="submit" class="search-btn">Go</button>
         </div>
-      </form>
+      </form> -->
       <div class="filter-bar">
         <form (ngSubmit)="filterOpts(filter)" #filter="ngForm">
           <label for="fieldName">Category:</label>
@@ -44,18 +44,35 @@
             <option value="city">City</option>
           </select>
           <label for="fieldValue">Value:</label>
-          <input id="fieldValue" name="fieldValue" ngModel placeholder="Enter existing city name!" [disabled]="!fieldName">
+          <select
+          id="fieldValue"
+          name="fieldValue"
+          [(ngModel)]="fieldValue"
+          placeholder="Enter existing city name!"
+          [disabled]="!fieldName">
+          <option value="">Select a city</option>
+          <option *ngFor="let city of availableCities" [value]="city">{{ city }}</option>
+        </select>
           <button type="submit">Filter</button>
         </form>
       </div>
     <table class="table">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Email</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('name')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">Name</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('email')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">Email</th>
           <th>Address</th>
-          <th>City</th>
-          <th>Details</th>
+          <th
+          style="cursor: pointer;"
+          (click)="sort('name')"
+          [ngClass]="{'arrow-up': sortOrder === '-1', 'arrow-down': sortOrder === '1'}">City</th>
+          <th >Details</th>
         </tr>
       </thead>
       <tbody *ngIf="schools.length > 0; else NoData">

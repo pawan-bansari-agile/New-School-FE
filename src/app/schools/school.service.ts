@@ -13,6 +13,14 @@ export interface SchoolSearchResponse {
   };
 }
 
+export interface citiesResponse {
+  data: [
+    {
+      city: string;
+    }
+  ];
+}
+
 @Injectable()
 export class SchoolService {
   schoolsChanged = new Subject<School[]>();
@@ -69,6 +77,12 @@ export class SchoolService {
 
   getSchoolById(id: number) {
     return this.schools[id];
+  }
+
+  setCities() {
+    return this.http.get<citiesResponse>(
+      'http://localhost:3000/school/findAll/cities'
+    );
   }
 
   addInDb(school: School, file) {
