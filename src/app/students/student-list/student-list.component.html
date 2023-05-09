@@ -4,10 +4,19 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-      <form (ngSubmit)="change(f)" #f="ngForm">
+      <!-- <form (ngSubmit)="change(f)" #f="ngForm">
       <label for="entries">Entries</label>
-      <input type="text" id="entries" ngModel name="entries" placeholder="{{limit}} / page">
+      <input type="text" id="entries" ngModel name="entries" placeholder="{{limit || 10}} / page">
       <button type="submit">Submit</button>
+      </form> -->
+      <form (ngSubmit)="change(f)" #f="ngForm">
+        <label for="entries">Entries</label>
+        <select id="entries" [(ngModel)]="limit" name="entries">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="15">15</option>
+        </select>
+        <button type="submit">Submit</button>
       </form>
       <form (ngSubmit)="search(s)" #s="ngForm">
         <label for="search">Search:</label>

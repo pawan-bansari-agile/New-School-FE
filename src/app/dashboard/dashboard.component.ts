@@ -25,7 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   countResponse = [];
   error: string = null;
   pageNumber: number;
-  limit: number;
+  limit: number = 10;
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
@@ -104,13 +104,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   change(form) {
     this.limit = form.value.entries;
-    this.dashService
-      .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
-      .subscribe((res) => {
-        this.schools = this.dashService.getSchools();
-        this.pageNumber = +res.data.pageNumber;
-        this.limit = +res.data.limit;
-      });
+    if (this.limit) {
+      this.dashService
+        .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.dashService.getSchools();
+          this.pageNumber = +res.data.pageNumber;
+          this.limit = +res.data.limit;
+        });
+    }
   }
 
   search(form) {

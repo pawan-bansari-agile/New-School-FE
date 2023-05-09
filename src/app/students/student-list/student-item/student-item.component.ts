@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Student } from '../../student.model';
 import { StudentService } from '../../student.service';
+import { SchoolService } from '../../../schools/school.service';
 
 export interface StudentUpdateResponse {
   data: Student;
@@ -24,6 +25,7 @@ export class StudentItemComponent implements OnInit {
   id: number;
   editMode = false;
   studentForm: FormGroup;
+  values = [];
 
   file: File;
   imageUrl: any;
@@ -33,7 +35,8 @@ export class StudentItemComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private studentService: StudentService,
-    private router: Router
+    private router: Router,
+    private schoolService: SchoolService
   ) {}
 
   ngOnInit(): void {
@@ -42,6 +45,7 @@ export class StudentItemComponent implements OnInit {
       this.editMode = params['id'] != null;
       this.initForm();
     });
+    this.selectSchool();
   }
 
   getFile(event) {
@@ -168,5 +172,15 @@ export class StudentItemComponent implements OnInit {
 
   onCancel() {
     this.router.navigate(['../'], { relativeTo: this.route });
+  }
+
+  selectSchool() {
+    this.schoolService.onInint('', '', '', '', '', 1, 100).subscribe((res) => {
+      this.values = [];
+      res.data.schoolsUrl.map((item) => {
+        this.values.push({ id: item._id, name: item.name });
+      });
+      console.log('values from school list for adding students', this.values);
+    });
   }
 }

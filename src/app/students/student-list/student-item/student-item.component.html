@@ -86,27 +86,17 @@
           </div>
         </div>
       </div>
-      <!-- <div class="row">
-        <div class="col-xs-12">
-          <div class="form-group">
-            <label for="status">Status</label>
-            <input
-            type="boolean"
-            id="status"
-            formControlName="status"
-            class="form-control">
-          </div>
-        </div>
-      </div> -->
       <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
             <label for="school">School</label>
-            <input
-            type="text"
-            id="school"
+            <select id="school"
             formControlName="school"
-            class="form-control">
+            class="form-control"
+            style="overflow-y:scroll;">
+              <option value="">-</option>
+              <option *ngFor="let value of values" [value]="value.id">{{value.name}}</option>
+            </select>
           </div>
         </div>
       </div>

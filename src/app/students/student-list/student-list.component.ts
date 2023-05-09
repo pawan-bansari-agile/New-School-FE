@@ -19,7 +19,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   fieldName: string = '';
   fieldValue: string = '';
   pageNumber: number;
-  limit: number;
+  limit: number = 10;
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
@@ -87,13 +87,15 @@ export class StudentListComponent implements OnInit, OnDestroy {
 
   change(form) {
     this.limit = form.value.entries;
-    this.studentService
-      .onInint('', '', '', '', '', this.pageNumber, this.limit)
-      .subscribe((res) => {
-        this.students = this.studentService.getStudents();
-        this.pageNumber = +res.data.pageNumber;
-        this.limit = +res.data.limit;
-      });
+    if (this.limit) {
+      this.studentService
+        .onInint('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.students = this.studentService.getStudents();
+          this.pageNumber = +res.data.pageNumber;
+          this.limit = +res.data.limit;
+        });
+    }
   }
 
   search(form) {

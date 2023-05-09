@@ -16,7 +16,7 @@ export class SchoolListComponent implements OnInit {
   fieldName: string = '';
   fieldValue: string = '';
   pageNumber: number;
-  limit: number;
+  limit: number = 10;
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
@@ -73,13 +73,15 @@ export class SchoolListComponent implements OnInit {
 
   change(form) {
     this.limit = form.value.entries;
-    this.schoolService
-      .onInint('', '', '', '', '', this.pageNumber, this.limit)
-      .subscribe((res) => {
-        this.schools = this.schoolService.getSchools();
-        this.pageNumber = +res.data.pageNumber;
-        this.limit = +res.data.limit;
-      });
+    if (this.limit) {
+      this.schoolService
+        .onInint('', '', '', '', '', this.pageNumber, this.limit)
+        .subscribe((res) => {
+          this.schools = this.schoolService.getSchools();
+          this.pageNumber = +res.data.pageNumber;
+          this.limit = +res.data.limit;
+        });
+    }
   }
 
   search(form) {
