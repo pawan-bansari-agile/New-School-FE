@@ -146,8 +146,8 @@ export class StudentService {
   }
 
   addStudent(student: Student, file) {
-    this.students.push(student);
-
+    // this.students.push(student);
+    this.students.splice(0, 0, student);
     this.studentsChanged.next(this.students.slice());
   }
 
