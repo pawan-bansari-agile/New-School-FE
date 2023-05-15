@@ -13,6 +13,7 @@ export interface StudentSearchResponse {
     studentUrl: Student[];
     pageNumber: string;
     limit: string;
+    totalPages: number;
   };
 }
 

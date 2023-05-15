@@ -10,6 +10,7 @@ export interface SchoolSearchResponse {
     schoolsUrl: School[];
     pageNumber: string;
     limit: string;
+    totalPages: number;
   };
 }
 

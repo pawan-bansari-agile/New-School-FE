@@ -16,6 +16,17 @@
             id="name"
             formControlName="name"
             class="form-control">
+            <div *ngIf="studentForm.get('name').touched && studentForm.get('name').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('name').errors.required">
+                Name is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="studentForm.get('name').errors.pattern"
+              >
+                Name must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -28,6 +39,17 @@
             id="parentNumber"
             formControlName="parentNumber"
             class="form-control">
+            <div *ngIf="studentForm.get('parentNumber').touched && studentForm.get('parentNumber').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('parentNumber').errors.required">
+                Parent Number is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="studentForm.get('parentNumber').errors.pattern"
+              >
+                Please enter a valid number!
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -40,10 +62,21 @@
             id="address"
             formControlName="address"
             class="form-control">
+            <div *ngIf="studentForm.get('address').touched && studentForm.get('address').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('address').errors.required">
+                Address is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="studentForm.get('address').errors.pattern"
+              >
+                Address must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-xs-12">
           <div class="form-group">
             <label for="std">Standard</label>
@@ -52,6 +85,38 @@
             id="std"
             formControlName="std"
             class="form-control">
+            <div *ngIf="studentForm.get('std').touched && studentForm.get('std').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('std').errors.required">
+                Standard is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="studentForm.get('std').errors.pattern"
+              >
+                Standard must not start or end with a space.
+              </small>
+            </div>
+          </div>
+        </div>
+      </div> -->
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group">
+            <label for="std">Standard</label>
+            <select id="std" formControlName="std" class="form-control">
+              <option *ngFor="let i of [1,2,3,4,5,6,7,8,9,10,11,12]" [value]="i">{{i}}</option>
+            </select>
+            <div *ngIf="studentForm.get('std').touched && studentForm.get('std').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('std').errors.required">
+                Standard is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="studentForm.get('std').errors.pattern"
+              >
+                Standard must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -83,10 +148,15 @@
             id="dob"
             formControlName="dob"
             class="form-control">
+            <div *ngIf="studentForm.get('dob').touched && studentForm.get('dob').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('dob').errors.required">
+                Birth Date is required.
+              </small>
+            </div>
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row" *ngIf="!editMode">
         <div class="col-xs-12">
           <div class="form-group">
             <label for="school">School</label>
@@ -94,9 +164,13 @@
             formControlName="school"
             class="form-control"
             style="overflow-y:scroll;">
-              <option value="">-</option>
               <option *ngFor="let value of values" [value]="value.id">{{value.name}}</option>
             </select>
+            <div *ngIf="studentForm.get('school').touched && studentForm.get('school').invalid">
+              <small class="text-danger" *ngIf="studentForm.get('school').errors.required">
+                School is required.
+              </small>
+            </div>
           </div>
         </div>
       </div>

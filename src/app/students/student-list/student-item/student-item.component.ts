@@ -180,7 +180,6 @@ export class StudentItemComponent implements OnInit {
       res.data.schoolsUrl.map((item) => {
         this.values.push({ id: item._id, name: item.name });
       });
-      console.log('values from school list for adding students', this.values);
     });
   }
 }

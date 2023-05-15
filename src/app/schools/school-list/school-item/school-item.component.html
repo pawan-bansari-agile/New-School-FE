@@ -16,6 +16,17 @@
             id="name"
             formControlName="name"
             class="form-control">
+            <div *ngIf="schoolForm.get('name').touched && schoolForm.get('name').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('name').errors.required">
+                Name is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('name').errors.pattern"
+              >
+                Name must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -28,6 +39,17 @@
             id="email"
             formControlName="email"
             class="form-control">
+            <div *ngIf="schoolForm.get('email').touched && schoolForm.get('email').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('email').errors.required">
+                Email is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('email').errors.pattern"
+              >
+                Please enter a valid email!
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -40,7 +62,17 @@
             id="address"
             formControlName="address"
             class="form-control">
-            <!-- <div *ngIf="schoolForm.get('address').hasError('whitespaceOnly')">Please enter a valid value.</div> -->
+            <div *ngIf="schoolForm.get('address').touched && schoolForm.get('address').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('address').errors.required">
+                Address is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('address').errors.pattern"
+              >
+                Please enter a valid address!
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -72,6 +104,17 @@
             id="zipCode"
             formControlName="zipCode"
             class="form-control">
+            <div *ngIf="schoolForm.get('zipCode').touched && schoolForm.get('zipCode').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('zipCode').errors.required">
+                ZipCode is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('zipCode').errors.pattern"
+              >
+                Please enter a valid zipCode!
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -84,6 +127,17 @@
             id="city"
             formControlName="city"
             class="form-control">
+            <div *ngIf="schoolForm.get('city').touched && schoolForm.get('city').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('city').errors.required">
+                City is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('city').errors.pattern"
+              >
+                City must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -96,6 +150,17 @@
             id="state"
             formControlName="state"
             class="form-control">
+            <div *ngIf="schoolForm.get('state').touched && schoolForm.get('state').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('state').errors.required">
+                State is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('state').errors.pattern"
+              >
+                State must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>
@@ -108,6 +173,17 @@
             id="country"
             formControlName="country"
             class="form-control">
+            <div *ngIf="schoolForm.get('country').touched && schoolForm.get('country').invalid">
+              <small class="text-danger" *ngIf="schoolForm.get('country').errors.required">
+                Country is required.
+              </small>
+              <small
+                class="text-danger"
+                *ngIf="schoolForm.get('country').errors.pattern"
+              >
+                Country must not start or end with a space.
+              </small>
+            </div>
           </div>
         </div>
       </div>

@@ -58,6 +58,7 @@ export class AuthComponent implements OnInit {
       email: new FormControl(email, [
         Validators.required,
         Validators.pattern(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/),
+        Validators.email,
       ]),
       password: new FormControl(password, Validators.required),
     });

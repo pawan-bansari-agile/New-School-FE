@@ -20,6 +20,9 @@ export class SchoolListComponent implements OnInit {
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
+  searchTerm = '';
+  totalPages: number;
+  pages: number[] = [];
 
   constructor(
     private schoolService: SchoolService,
@@ -36,6 +39,10 @@ export class SchoolListComponent implements OnInit {
       .subscribe((res) => {
         this.pageNumber = +res.data.pageNumber;
         this.limit = +res.data.limit;
+        this.totalPages = +res.data.totalPages;
+        for (let i = 1; i <= this.totalPages; i++) {
+          this.pages.push(i);
+        }
       });
     this.schools = this.schoolService.getSchools();
     this.schoolService.setCities().subscribe((res) => {
@@ -71,12 +78,18 @@ export class SchoolListComponent implements OnInit {
     }
   }
 
-  change(form) {
-    this.limit = form.value.entries;
+  change(value) {
+    this.limit = value;
     if (this.limit) {
       this.schoolService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
+          console.log('res', res);
+          this.totalPages = +res.data.totalPages;
+          this.pages = [];
+          for (let i = 1; i <= this.totalPages; i++) {
+            this.pages.push(i);
+          }
           this.schools = this.schoolService.getSchools();
           this.pageNumber = +res.data.pageNumber;
           this.limit = +res.data.limit;
@@ -84,8 +97,8 @@ export class SchoolListComponent implements OnInit {
     }
   }
 
-  search(form) {
-    this.keyword = form.value.search;
+  search(searchTerm) {
+    this.keyword = searchTerm;
     this.schoolService
       .onInint('', '', this.keyword, '', '')
       .subscribe((res) => {
@@ -104,7 +117,7 @@ export class SchoolListComponent implements OnInit {
   }
 
   decrease() {
-    if (this.pageNumber != 1) {
+    if (this.pageNumber != this.pages[0]) {
       this.pageNumber--;
       this.schoolService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
@@ -115,7 +128,7 @@ export class SchoolListComponent implements OnInit {
   }
 
   increase() {
-    if (this.schools.length != 0) {
+    if (this.pageNumber != this.pages[this.pages.length - 1]) {
       this.pageNumber++;
       this.schoolService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
@@ -123,5 +136,13 @@ export class SchoolListComponent implements OnInit {
           this.schools = this.schoolService.getSchools();
         });
     }
+  }
+
+  isFirstPage(): boolean {
+    return this.pageNumber === this.pages[0];
+  }
+
+  isLastPage(): boolean {
+    return this.pageNumber === this.pages[this.pages.length - 1];
   }
 }

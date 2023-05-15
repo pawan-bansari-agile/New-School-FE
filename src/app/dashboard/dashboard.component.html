@@ -9,7 +9,7 @@
           <input type="text" id="entries" ngModel name="entries" placeholder="{{limit || 10}} / page">
           <button type="submit" [disabled]="!f.form.valid">Submit</button>
           </form> -->
-          <form (ngSubmit)="change(f)" #f="ngForm">
+          <!-- <form (ngSubmit)="change(f)" #f="ngForm">
             <label for="entries">Entries</label>
             <select id="entries" [(ngModel)]="limit" name="entries">
               <option value="5">5</option>
@@ -17,12 +17,20 @@
               <option value="15">15</option>
             </select>
             <button type="submit">Submit</button>
-          </form>
-          <form (ngSubmit)="search(s)" #s="ngForm">
+          </form> -->
+          <label for="entries">Entries</label>
+          <select id="entries" [(ngModel)]="limit" name="entries" (ngModelChange)="change($event)">
+            <option value="5">5</option>
+            <option value="10" selected>10</option>
+            <option value="15">15</option>
+          </select>
+          <!-- <form (ngSubmit)="search(s)" #s="ngForm">
             <label for="search">Search:</label>
             <input type="text" id="search" ngModel name="search" placeholder="Search...">
             <button type="submit">Go</button>
-          </form>
+          </form> -->
+          <label for="search">Search:</label>
+          <input type="text" id="search" [(ngModel)]="searchTerm" placeholder="Search..." (input)="search(searchTerm)">
           <!-- <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
             <div class="sorting-container">
               <div class="sorting-bar">
@@ -90,13 +98,13 @@
                 <!-- <li [ngClass]="{disabled: pageNumber === 1}" class="page-item">
                   <a (click)="setPage(1)" class="page-link">First</a>
                 </li> -->
-                <li [ngClass]="{disabled: pageNumber === 1}" class="page-item">
+                <li [ngClass]="{disabled: isFirstPage()}" class="page-item">
                   <a (click)="decrease()" class="page-link" style="cursor: pointer;">Previous</a>
                 </li>
-                <li [ngClass]="{active: pageNumber === pageNumber}" class="page-item">
-                  <a >{{ pageNumber }}</a>
+                <li [ngClass]="{active: pageNumber === page}" class="page-item" *ngFor="let page of pages">
+                  <a >{{ page }}</a>
                 </li>
-                <li [ngClass]="{disabled: this.schools.length == 0}" class="page-item">
+                <li [ngClass]="{disabled: isLastPage()}" class="page-item">
                   <a (click)="increase()" class="page-link" style="cursor: pointer;">Next</a>
                 </li>
                 <!-- <li [ngClass]="{disabled: pageNumber === totalPages}" class="page-item">

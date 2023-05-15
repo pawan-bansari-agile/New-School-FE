@@ -5,8 +5,7 @@ import { AuthService } from 'src/app/auth/auth.service';
 import { User } from 'src/app/auth/user.model';
 import { School } from 'src/app/schools/school.model';
 import { Student } from '../student.model';
-import { StudentService } from '../student.service';
-import { StatusUpdateRes } from '../student.service';
+import { StudentService, StatusUpdateRes } from '../student.service';
 
 @Component({
   selector: 'app-student-list',
@@ -29,6 +28,9 @@ export class StudentListComponent implements OnInit, OnDestroy {
   school: School = null;
   role: string = '';
   values = [];
+  searchTerm = '';
+  totalPages: number;
+  pages: number[] = [];
 
   constructor(
     private studentService: StudentService,
@@ -57,6 +59,10 @@ export class StudentListComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.pageNumber = +res.data.pageNumber;
         this.limit = +res.data.limit;
+        this.totalPages = +res.data.totalPages;
+        for (let i = 1; i <= this.totalPages; i++) {
+          this.pages.push(i);
+        }
       });
     this.students = this.studentService.getStudents();
     this.studentService.errorEmitter.subscribe((err) => {
@@ -85,12 +91,17 @@ export class StudentListComponent implements OnInit, OnDestroy {
     );
   }
 
-  change(form) {
-    this.limit = form.value.entries;
+  change(value) {
+    this.limit = value;
     if (this.limit) {
       this.studentService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
+          this.totalPages = +res.data.totalPages;
+          this.pages = [];
+          for (let i = 1; i <= this.totalPages; i++) {
+            this.pages.push(i);
+          }
           this.students = this.studentService.getStudents();
           this.pageNumber = +res.data.pageNumber;
           this.limit = +res.data.limit;
@@ -98,15 +109,13 @@ export class StudentListComponent implements OnInit, OnDestroy {
     }
   }
 
-  search(form) {
-    this.keyword = form.value.search;
-    if (this.keyword) {
-      this.studentService
-        .onInint('', '', this.keyword, '', '')
-        .subscribe((res) => {
-          this.students = this.studentService.getStudents();
-        });
-    }
+  search(searchTerm) {
+    this.keyword = searchTerm;
+    this.studentService
+      .onInint('', '', this.keyword, '', '')
+      .subscribe((res) => {
+        this.students = this.studentService.getStudents();
+      });
   }
 
   sort(name) {
@@ -132,7 +141,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   decrease() {
-    if (this.pageNumber != 1) {
+    if (this.pageNumber != this.pages[0]) {
       this.pageNumber--;
       this.studentService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
@@ -143,7 +152,7 @@ export class StudentListComponent implements OnInit, OnDestroy {
   }
 
   increase() {
-    if (this.students.length != 0) {
+    if (this.students.length != this.pages[this.pages.length - 1]) {
       this.pageNumber++;
       this.studentService
         .onInint('', '', '', '', '', this.pageNumber, this.limit)
@@ -169,5 +178,13 @@ export class StudentListComponent implements OnInit, OnDestroy {
         });
       });
     }
+  }
+
+  isFirstPage(): boolean {
+    return this.pageNumber === this.pages[0];
+  }
+
+  isLastPage(): boolean {
+    return this.pageNumber === this.pages[this.pages.length - 1];
   }
 }

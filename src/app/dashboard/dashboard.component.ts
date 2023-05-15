@@ -29,6 +29,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   keyword: string;
   sortBy: string = '';
   sortOrder: string = '';
+  totalPages: number;
+  pages: number[] = [];
+  searchTerm = '';
 
   constructor(
     private dashService: DashBoardService,
@@ -55,6 +58,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.schools = this.dashService.getSchools();
           this.pageNumber = +res.data.pageNumber;
           this.limit = +res.data.limit;
+          this.totalPages = +res.data.totalPages;
+          for (let i = 1; i <= this.totalPages; i++) {
+            this.pages.push(i);
+          }
         });
       this.dashService.getTotalCount().subscribe((res) => {
         this.totalStudCnt = res.data[0].total;
@@ -81,7 +88,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   decrease() {
-    if (this.pageNumber != 1) {
+    if (this.pageNumber != this.pages[0]) {
       this.pageNumber--;
       this.dashService
         .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
@@ -92,7 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   increase() {
-    if (this.schools.length != 0) {
+    if (this.schools.length != this.pages[this.pages.length - 1]) {
       this.pageNumber++;
       this.dashService
         .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
@@ -102,12 +109,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  change(form) {
-    this.limit = form.value.entries;
+  change(value) {
+    this.limit = value;
     if (this.limit) {
       this.dashService
         .fetchSchools('', '', '', '', '', this.pageNumber, this.limit)
         .subscribe((res) => {
+          this.totalPages = +res.data.totalPages;
+          this.pages = [];
+          for (let i = 1; i <= this.totalPages; i++) {
+            this.pages.push(i);
+          }
           this.schools = this.dashService.getSchools();
           this.pageNumber = +res.data.pageNumber;
           this.limit = +res.data.limit;
@@ -115,8 +127,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  search(form) {
-    this.keyword = form.value.search;
+  search(searchTerm) {
+    this.keyword = searchTerm;
     this.dashService
       .fetchSchools('', '', this.keyword, '', '')
       .subscribe((res) => {
@@ -132,5 +144,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       .subscribe((res) => {
         this.schools = this.dashService.getSchools();
       });
+  }
+
+  isFirstPage(): boolean {
+    return this.pageNumber === this.pages[0];
+  }
+
+  isLastPage(): boolean {
+    return this.pageNumber === this.pages[this.pages.length - 1];
   }
 }

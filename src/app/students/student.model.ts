@@ -11,7 +11,7 @@ export class Student {
     public deleted: boolean,
     public school: string,
     public __v: number,
-    public message: string,
+    public message: string
   ) {
     _id = _id;
     name = name;
@@ -40,7 +40,7 @@ export class UpdatedStudent {
     public status: boolean,
     public deleted: boolean,
     public school: string,
-    public __v: number,
+    public __v: number
   ) {
     _id = _id;
     name = name;
