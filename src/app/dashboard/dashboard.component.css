@@ -5,10 +5,6 @@
 .sorting-bar {
   margin-right: 10px;
 }
-/* .search-btn {
-    height: 20px;
-    line-height: 20px;
-  } */
 .search-btn {
     height: calc(100% - 4px);
     margin: 2px 0;

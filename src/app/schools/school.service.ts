@@ -105,7 +105,6 @@ export class SchoolService {
   }
 
   addSchool(school: School, file: string) {
-    // this.schools.push(school);
     this.schools.splice(0, 0, school);
     this.schoolsChanged.next(this.schools.slice());
   }

@@ -4,56 +4,14 @@
     <div class="col-md-5">
       <div class="row">
         <div class="col-xs-12">
-          <!-- <form (ngSubmit)="change(f)" #f="ngForm">
-          <label for="entries">Entries</label>
-          <input type="text" id="entries" ngModel name="entries" placeholder="{{limit || 10}} / page">
-          <button type="submit" [disabled]="!f.form.valid">Submit</button>
-          </form> -->
-          <!-- <form (ngSubmit)="change(f)" #f="ngForm">
-            <label for="entries">Entries</label>
-            <select id="entries" [(ngModel)]="limit" name="entries">
-              <option value="5">5</option>
-              <option value="10" selected>10</option>
-              <option value="15">15</option>
-            </select>
-            <button type="submit">Submit</button>
-          </form> -->
           <label for="entries">Entries</label>
           <select id="entries" [(ngModel)]="limit" name="entries" (ngModelChange)="change($event)">
             <option value="5">5</option>
             <option value="10" selected>10</option>
             <option value="15">15</option>
           </select>
-          <!-- <form (ngSubmit)="search(s)" #s="ngForm">
-            <label for="search">Search:</label>
-            <input type="text" id="search" ngModel name="search" placeholder="Search...">
-            <button type="submit">Go</button>
-          </form> -->
           <label for="search">Search:</label>
           <input type="text" id="search" [(ngModel)]="searchTerm" placeholder="Search..." (input)="search(searchTerm)">
-          <!-- <form (ngSubmit)="sort(sorting)" #sorting="ngForm">
-            <div class="sorting-container">
-              <div class="sorting-bar">
-                <label for="sortBy">Sort by:</label>
-                <select id="sortBy" name="sortBy" ngModel>
-                  <option value="">-</option>
-                  <option value="name">School Name</option>
-                  <option value="count">Total Student Count</option>
-                </select>
-              </div>
-              <div class="sorting-bar">
-                <label for="sortOrder">Sort Order:</label>
-                <select id="sortOrder" name="sortOrder" ngModel>
-                  <option value="">-</option>
-                  <option value="1">Ascending</option>
-                  <option value="-1">Descending</option>
-                </select>
-              </div>
-              <button type="submit" class="search-btn">Go</button>
-            </div>
-          </form> -->
-          <!-- <label for="currentPage">Page No:-</label>
-          <input type="text" id="currentPage" placeholder="{{pageNumber}}"> -->
           <table class="table">
             <thead>
               <tr>
@@ -70,9 +28,6 @@
                 >
                 Total Student Count
                 </th>
-                <!-- <th>Email</th>
-                <th>Address</th>
-                <th>City</th>-->
                 <th>Details</th>
               </tr>
             </thead>
@@ -82,9 +37,6 @@
               (click)="selectedIndex = i">
                 <td>{{ school.name }}</td>
                 <td>{{ school.count }}</td>
-                <!-- <td>{{ school.email }}</td>
-                <td>{{ school.address }}</td>
-                <td>{{ school.city }}</td> -->
                 <td><button [routerLink]='[i]'>View</button></td>
               </tr>
             </tbody>
@@ -95,9 +47,6 @@
           <div style="display: flex; justify-content: center;">
             <nav>
               <ul class="pagination">
-                <!-- <li [ngClass]="{disabled: pageNumber === 1}" class="page-item">
-                  <a (click)="setPage(1)" class="page-link">First</a>
-                </li> -->
                 <li [ngClass]="{disabled: isFirstPage()}" class="page-item">
                   <a (click)="decrease()" class="page-link" style="cursor: pointer;">Previous</a>
                 </li>
@@ -107,9 +56,6 @@
                 <li [ngClass]="{disabled: isLastPage()}" class="page-item">
                   <a (click)="increase()" class="page-link" style="cursor: pointer;">Next</a>
                 </li>
-                <!-- <li [ngClass]="{disabled: pageNumber === totalPages}" class="page-item">
-                  <a (click)="setPage(totalPages)" class="page-link">Last</a>
-                </li> -->
               </ul>
             </nav>
           </div>
@@ -133,10 +79,6 @@
             <tr>
               <th>Standard</th>
               <th>Student Count</th>
-              <!-- <th>Email</th>
-              <th>Address</th>
-              <th>City</th>-->
-              <!-- <th>Details</th> -->
             </tr>
           </thead>
           <tbody>
@@ -145,10 +87,6 @@
             (click)="selectedIndex = i">
               <td>{{ item._id }}</td>
               <td>{{ item.count }}</td>
-              <!-- <td>{{ school.email }}</td>
-              <td>{{ school.address }}</td>
-              <td>{{ school.city }}</td> -->
-              <!-- <td><button [routerLink]='[i]'>View</button></td> -->
             </tr>
           </tbody>
         </table>
